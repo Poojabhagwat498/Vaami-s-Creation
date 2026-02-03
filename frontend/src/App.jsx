@@ -15,6 +15,8 @@ import Menu from "./pages/Menu";
 import ProductDetails from "./pages/ProductDetails";
 import Checkout from "./pages/Checkout"; // <-- Added this import
 import WishList from "./pages/WishList";
+import AdminUsers from "./pages/AdminUsers";
+
 
 function App() {
   return (
@@ -71,6 +73,8 @@ function App() {
               </AdminRoute>
             }
           />
+          <Route path="/admin/users" element={<AdminUsers />} />
+
           
           <Route path="/me" element={<Me />} />
           <Route path="/category/:categoryName" element={<Category />} />

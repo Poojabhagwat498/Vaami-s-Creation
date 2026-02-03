@@ -12,6 +12,7 @@ const styles = {
     padding: "12px 40px",
     borderBottom: "1px solid #ddd",
     background: "#fff",
+    
   },
 
   logoSection: {

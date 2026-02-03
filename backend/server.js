@@ -9,7 +9,7 @@ import authRoutes from "./routers/auth.routers.js";
 import productRoutes from "./routers/product.routers.js";
 import orderRoutes from "./routers/order.routers.js";
 import createAdmin from "./utils/createAdmin.js";
-
+import adminRoutes from "./routers/admin.routes.js";
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 
-
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);

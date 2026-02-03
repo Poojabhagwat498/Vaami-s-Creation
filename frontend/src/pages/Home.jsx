@@ -61,8 +61,8 @@ const Home = () => {
   return (
     <div style={styles.pageContainer}>
       {/* HERO SECTION */}
-      <Hero />
-
+     
+     {!searchQuery && <Hero />}
       {/* PRODUCTS SECTION */}
       <section style={styles.featuredProducts}>
         <h2 style={styles.sectionTitle}>Featured Products</h2>

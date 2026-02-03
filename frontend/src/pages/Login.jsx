@@ -9,8 +9,18 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(45deg, #0f0c29, #302b63, #24243e)",
+     backgroundImage: `
+      linear-gradient(
+        rgba(15, 12, 41, 0.85),
+        rgba(36, 36, 62, 0.85)
+      ),
+      url("/public/login.webp")
+    `,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
   },
+  
   card: {
     background: "rgba(255, 255, 255, 0.1)",
     backdropFilter: "blur(10px)",
@@ -131,10 +141,12 @@ function Login() {
 
       const data = res.data;
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      const authData = {
+        token: data.token,
+        user: data.user,
+      };
 
-      login(data.user);
+  login(authData);
 
       setIsError(false);
       setMessage("Login successful!");
@@ -155,7 +167,7 @@ function Login() {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.title}>Login</h2>
+        <h2 style={styles.title}>Welcome To Vaami's Creation</h2>
 
         <form onSubmit={handleSubmit}>
           <label htmlFor="email" style={styles.label}>
