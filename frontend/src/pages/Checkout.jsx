@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Checkout = () => {
-  const { bagItems, clearBag } = useBag();
+  const { bagItems, decreaseQty, removeFromBag } = useBag();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +66,7 @@ const Checkout = () => {
       }),
     });
 
-    clearBag();
+    removeFromBag();
     navigate("/orders");
   };
 

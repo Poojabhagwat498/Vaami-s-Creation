@@ -14,7 +14,7 @@ const styles = {
         rgba(15, 12, 41, 0.85),
         rgba(36, 36, 62, 0.85)
       ),
-      url("/public/login.webp")
+      url("/login.webp")
     `,
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -152,7 +152,7 @@ function Login() {
       setMessage("Login successful!");
 
       setTimeout(() => {
-        if (data.user.role === "admin") {
+       if (data.user.role.toLowerCase() === "admin") {
           navigate("/admin");
         } else {
           navigate("/home");

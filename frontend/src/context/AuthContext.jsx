@@ -4,38 +4,34 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const storedData = localStorage.getItem("auth");
+
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+      setUser(parsed.user);
     }
+
+    setLoading(false);
   }, []);
 
-  const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+  const login = (data) => {
+    localStorage.setItem("auth", JSON.stringify(data));
+    setUser(data.user); // 🔥 VERY IMPORTANT
   };
-
 
   const logout = () => {
+    localStorage.removeItem("auth");
     setUser(null);
-    localStorage.removeItem("user");
   };
 
-  
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// ✅ CUSTOM HOOK
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
