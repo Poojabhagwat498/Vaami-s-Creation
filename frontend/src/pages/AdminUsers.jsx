@@ -6,7 +6,8 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const token = JSON.parse(localStorage.getItem("user"))?.token;
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = user?.token;
 
       const res = await fetch("http://localhost:5000/api/admin/users", {
         headers: {
