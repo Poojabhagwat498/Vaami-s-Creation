@@ -13,7 +13,7 @@ import Me from "./pages/Me";
 import Category from "./pages/Category";
 import Menu from "./pages/Menu";
 import ProductDetails from "./pages/ProductDetails";
-import Checkout from "./pages/Checkout"; // <-- Added this import
+import Checkout from "./pages/Checkout"; 
 import WishList from "./pages/WishList";
 import AdminUsers from "./pages/AdminUsers";
 

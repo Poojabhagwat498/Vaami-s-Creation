@@ -7,24 +7,43 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     items: [
       {
-        _id: String,
         name: String,
-        image: String,
         price: Number,
         quantity: Number,
+        image: String,
       },
     ],
-    totalAmount: Number,
-    paymentMethod: String,
+
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
+
+    paymentMethod: {
+      type: String,
+      default: "Card",
+    },
+
     paymentStatus: {
       type: String,
       default: "paid",
     },
+
     status: {
       type: String,
-      default: "Processing",
+      default: "processing",
+    },
+
+    deliveryAddress: {
+      name: String,
+      phone: String,
+      area: String,
+      city: String,
+      state: String,
+      pincode: String,
     },
   },
   { timestamps: true }

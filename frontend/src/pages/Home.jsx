@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { useLocation } from "react-router-dom";
 import Hero from "../components/Hero.jsx";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -84,6 +85,7 @@ const Home = () => {
           </div>
         )}
       </section>
+      <Footer />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Checkout = () => {
-  const { bagItems, decreaseQty, removeFromBag } = useBag();
+  const { bagItems, removeFromBag } = useBag();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -36,23 +36,27 @@ const Checkout = () => {
     });
   };
 
-  const placeOrder = async () => {
-    if (
-      !formData.name ||
-      !formData.phone ||
-      !formData.area ||
-      !formData.city ||
-      !formData.state ||
-      !formData.pincode
-    ) {
-      alert("Please fill all address details");
+ const placeOrder = async () => {
+
+  if (!formData.name || !formData.phone || !formData.area ||
+      !formData.city || !formData.state || !formData.pincode) {
+    alert("Please fill all address details");
+    return;
+  }
+
+  try {
+
+    setLoading(true);
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first");
+      navigate("/login");
       return;
     }
 
-    setLoading(true);
-    const token = localStorage.getItem("token");
-
-    await fetch("http://localhost:5000/api/orders", {
+    const res = await fetch("http://localhost:5000/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,15 +64,32 @@ const Checkout = () => {
       },
       body: JSON.stringify({
         items: bagItems,
-        totalAmount: total,
+        totalPrice: total,
         paymentMethod: "Card",
         deliveryAddress: formData,
       }),
     });
 
+    const data = await res.json();
+
+    console.log("Order response:", data);
+
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+
+    alert("Order placed successfully 🎉");
+
     removeFromBag();
     navigate("/orders");
-  };
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Order failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div style={styles.page}>
@@ -80,7 +101,13 @@ const Checkout = () => {
           {["name", "phone", "area", "city", "state", "pincode"].map((field) => (
             <input
               key={field}
-              type={field === "phone" ? "tel" : field === "pincode" ? "number" : "text"}
+              type={
+                field === "phone"
+                  ? "tel"
+                  : field === "pincode"
+                  ? "number"
+                  : "text"
+              }
               name={field}
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
               value={formData[field]}
@@ -89,7 +116,7 @@ const Checkout = () => {
             />
           ))}
 
-          <button style={styles.deleteBtn} onClick={deleteAddress}>
+          <button type="button" style={styles.deleteBtn} onClick={deleteAddress}>
             Delete Address
           </button>
         </div>
@@ -97,21 +124,23 @@ const Checkout = () => {
         {/* ORDER SUMMARY */}
         <div style={styles.summary}>
           <h3 style={styles.summaryTitle}>Order Summary</h3>
+
           {bagItems.map((item) => (
             <p key={item._id} style={styles.summaryText}>
               {item.name} × {item.quantity}
             </p>
           ))}
+
           <h4 style={styles.total}>Total: ₹{total}</h4>
         </div>
 
-        {/* PAYMENT */}
+        {/* PAYMENT BUTTON */}
         <button
           onClick={placeOrder}
           disabled={loading}
           style={{
             ...styles.payBtn,
-            ...(loading && styles.payBtnDisabled),
+            ...(loading ? styles.payBtnDisabled : {}),
           }}
         >
           {loading ? "Processing..." : "Pay Now"}

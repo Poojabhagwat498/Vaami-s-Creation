@@ -1,74 +1,8 @@
 import { useEffect, useState } from "react";
 
-const styles = {
-  page: {
-    maxWidth: "1000px",
-    margin: "40px auto",
-    padding: "15px",
-    fontFamily: "Segoe UI, sans-serif",
-  },
-  title: {
-    fontSize: "28px",
-    marginBottom: "28px",
-    color: "#4c1d95",
-    textAlign: "center",
-  },
-  orderCard: {
-    background: "#faf7ff",
-    borderRadius: "14px",
-    padding: "20px",
-    marginBottom: "24px",
-    boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-  },
-  orderInfo: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-    gap: "35px",
-    marginBottom: "16px",
-    fontSize: "18px",
-  },
-  badge: (bg) => ({
-    display: "inline-block",
-    padding: "4px 10px",
-    borderRadius: "999px",
-    fontSize: "15px",
-    fontWeight: "600",
-    background: bg,
-    color: "#fff",
-  }),
-  items: {
-    borderTop: "1px solid #ddd6fe",
-    paddingTop: "16px",
-  },
-  item: {
-    display: "flex",
-    gap: "16px",
-    marginBottom: "14px",
-    alignItems: "center",
-  },
-  itemImg: {
-    width: "80px",
-    height: "80px",
-    objectFit: "cover",
-    borderRadius: "10px",
-    border: "1px solid #ddd6fe",
-  },
-  itemName: {
-    fontWeight: "600",
-    color: "#5b21b6",
-  },
-  empty: {
-    textAlign: "center",
-    color: "#777",
-    marginTop: "40px",
-  },
-};
-
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -82,9 +16,9 @@ const Orders = () => {
 
         const data = await res.json();
 
-        console.log("Orders API Response:", data);
+        console.log("Orders API response:", data);
 
-        // ✅ IMPORTANT FIX
+        // ✅ Ensure orders is always array
         if (Array.isArray(data)) {
           setOrders(data);
         } else if (Array.isArray(data.orders)) {
@@ -92,81 +26,56 @@ const Orders = () => {
         } else {
           setOrders([]);
         }
+
       } catch (err) {
-        console.error(err);
-        setError("Failed to fetch orders");
+        console.error("Fetch orders error:", err);
+        setOrders([]);
       } finally {
         setLoading(false);
       }
     };
 
-    if (token) {
-      fetchOrders();
-    } else {
-      setLoading(false);
-      setError("User not authenticated");
-    }
+    if (token) fetchOrders();
   }, [token]);
 
   if (loading) {
-    return <p style={styles.empty}>Loading orders...</p>;
-  }
-
-  if (error) {
-    return <p style={styles.empty}>{error}</p>;
+    return <p style={{ textAlign: "center" }}>Loading orders...</p>;
   }
 
   return (
-    <div style={styles.page}>
-      <h2 style={styles.title}>My Orders</h2>
+    <div style={{ maxWidth: "900px", margin: "40px auto" }}>
+      <h2 style={{ textAlign: "center" }}>My Orders</h2>
 
       {orders.length === 0 ? (
-        <p style={styles.empty}>No orders found</p>
+        <p style={{ textAlign: "center" }}>No orders found</p>
       ) : (
         orders.map((order) => (
-          <div key={order._id} style={styles.orderCard}>
-            {/* Order Info */}
-            <div style={styles.orderInfo}>
-              <p><b>Order ID:</b> {order._id}</p>
-              <p><b>Total:</b> ₹{order.totalAmount}</p>
+          <div
+            key={order._id}
+            style={{
+              background: "#faf7ff",
+              padding: "20px",
+              marginBottom: "20px",
+              borderRadius: "10px",
+            }}
+          >
+            <p><b>Order ID:</b> {order._id}</p>
+            <p><b>Total:</b> ₹{order.totalPrice}</p>
+            <p><b>Status:</b> {order.status}</p>
 
-              <p>
-                <b>Payment:</b>{" "}
-                <span
-                  style={styles.badge(
-                    order.paymentStatus === "paid" ? "#16a34a" : "#dc2626"
-                  )}
-                >
-                  {order.paymentStatus}
-                </span>
-              </p>
-
-              <p>
-                <b>Status:</b>{" "}
-                <span style={styles.badge("#7c3aed")}>
-                  {order.status}
-                </span>
-              </p>
-            </div>
-
-            {/* Items */}
-            <div style={styles.items}>
-              {Array.isArray(order.items) &&
-                order.items.map((item) => (
-                  <div key={item._id} style={styles.item}>
-                    <img
-                      src={`http://localhost:5000${item.image}`}
-                      alt={item.name}
-                      style={styles.itemImg}
-                    />
-                    <div>
-                      <p style={styles.itemName}>{item.name}</p>
-                      <p>Qty: {item.quantity}</p>
-                      <p>₹{item.price}</p>
-                    </div>
-                  </div>
-                ))}
-            </div>
+            {order.items?.map((item) => (
+              <div key={item._id} style={{ display: "flex", gap: "10px" }}>
+                <img
+                  src={`http://localhost:5000${item.image}`}
+                  width="70"
+                />
+                <div>
+                  <p>{item.name}</p>
+                  <p>Qty: {item.quantity}</p>
+                  <p>₹{item.price}</p>
+                </div>
+              </div>
+            ))}
           </div>
         ))
       )}
