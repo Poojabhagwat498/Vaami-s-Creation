@@ -110,7 +110,7 @@ cd Vaami-s-Creation
 Frontend
 
 ```bash
-cd client
+cd frontend
 npm install
 npm start
 ```
@@ -118,7 +118,7 @@ npm start
 Backend
 
 ```bash
-cd server
+cd backend
 npm install
 npm start
 ```
