@@ -123,19 +123,6 @@ npm install
 npm start
 ```
 
----
-
-## 📸 Screenshots
-
-Add screenshots of:
-
-- Homepage
-- Product Page
-- Wishlist
-- Cart
-- Admin Dashboard
-
----
 
 ## 📚 What I Learned
 
