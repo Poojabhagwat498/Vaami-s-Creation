@@ -16,6 +16,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Checkout from "./pages/Checkout"; 
 import WishList from "./pages/WishList";
 import AdminUsers from "./pages/AdminUsers";
+import AdminOrders from "./pages/AdminOrders";
 
 
 function App() {
@@ -74,6 +75,8 @@ function App() {
             }
           />
           <Route path="/admin/users" element={<AdminUsers />} />
+
+          <Route path="/admin/orders" element={<AdminOrders />} />
 
           
           <Route path="/me" element={<Me />} />

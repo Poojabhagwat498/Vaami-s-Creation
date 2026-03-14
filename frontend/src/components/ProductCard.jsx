@@ -17,87 +17,96 @@ const ProductCard = ({ product }) => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cinzel:wght@400;500;600&display=swap');
 
         .vaami-card {
-          width: 280px;
+          width: 300px;
           background: #ffffff;
           border: 1px solid #e8e2d9;
-          border-radius: 4px;
+          border-radius: 6px;
           overflow: hidden;
           position: relative;
           transition: transform 0.35s ease, box-shadow 0.35s ease;
           font-family: 'Cormorant Garamond', Georgia, serif;
         }
+
         .vaami-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 24px 52px rgba(60, 20, 100, 0.13);
+          transform: translateY(-8px);
+          box-shadow: 0 28px 60px rgba(60, 20, 100, 0.18);
         }
+
         .vaami-img-wrap {
           position: relative;
-          height: 240px;
+          height: 260px;
           overflow: hidden;
           background: #f9f7f4;
           cursor: pointer;
         }
+
         .vaami-img-wrap img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 0.55s ease;
         }
+
         .vaami-card:hover .vaami-img-wrap img {
-          transform: scale(1.05);
+          transform: scale(1.06);
         }
+
         .vaami-badge {
           position: absolute;
-          top: 14px;
-          left: 14px;
+          top: 16px;
+          left: 16px;
           background: #2e1065;
           color: #ffd6ff;
           font-family: 'Cinzel', serif;
-          font-size: 9px;
-          letter-spacing: 0.22em;
-          padding: 5px 10px;
-          border-radius: 0;
+          font-size: 11px;
+          letter-spacing: 0.25em;
+          padding: 6px 12px;
           z-index: 2;
         }
+
         .vaami-wish {
           position: absolute;
-          top: 12px;
-          right: 12px;
-          width: 34px;
-          height: 34px;
+          top: 14px;
+          right: 14px;
+          width: 38px;
+          height: 38px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.92);
+          background: rgba(255,255,255,0.95);
           border: 1px solid #e8e2d9;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          font-size: 15px;
-          transition: all 0.2s;
+          font-size: 18px;
+          transition: all 0.25s;
           z-index: 2;
         }
+
         .vaami-wish:hover {
           background: #fff2f8;
           border-color: #d4537e;
-          transform: scale(1.1);
+          transform: scale(1.15);
         }
+
         .vaami-body {
-          padding: 18px 20px 0;
+          padding: 22px 24px 4px;
         }
+
         .vaami-category {
           font-family: 'Cinzel', serif;
-          font-size: 9px;
-          letter-spacing: 0.25em;
+          font-size: 11px;
+          letter-spacing: 0.28em;
           color: #9c8fa0;
-          margin-bottom: 7px;
+          margin-bottom: 10px;
           text-transform: uppercase;
         }
+
         .vaami-name {
-          font-size: 18px;
-          font-weight: 600;
+          font-size: 22px;
+          font-weight: 700;
           color: #1a1020;
           line-height: 1.3;
           white-space: nowrap;
@@ -105,53 +114,62 @@ const ProductCard = ({ product }) => {
           text-overflow: ellipsis;
           text-transform: capitalize;
         }
+
         .vaami-divider {
           display: flex;
           align-items: center;
-          gap: 8px;
-          margin: 10px 0;
+          gap: 10px;
+          margin: 14px 0;
         }
+
         .vaami-divider-line {
           flex: 1;
           height: 1px;
           background: #ede8e4;
         }
+
         .vaami-divider-gem {
-          font-size: 8px;
+          font-size: 10px;
           color: #b0a0b8;
         }
+
         .vaami-price-row {
           display: flex;
           align-items: baseline;
-          gap: 8px;
-          margin-bottom: 16px;
+          gap: 10px;
+          margin-bottom: 18px;
         }
+
         .vaami-price {
           font-family: 'Cinzel', serif;
-          font-size: 20px;
-          font-weight: 500;
+          font-size: 24px;
+          font-weight: 600;
           color: #2e1065;
         }
+
         .vaami-price-label {
-          font-size: 12px;
+          font-size: 14px;
           color: #b0a8b4;
           font-style: italic;
         }
+
         .vaami-actions {
           display: grid;
           grid-template-columns: 1fr 1fr;
           border-top: 1px solid #ede8e4;
         }
+
         .vaami-btn {
-          padding: 14px 10px;
+          padding: 16px 12px;
           border: none;
           cursor: pointer;
           font-family: 'Cinzel', serif;
-          font-size: 10px;
-          letter-spacing: 0.15em;
-          font-weight: 500;
+          font-size: 13px;
+          letter-spacing: 0.18em;
+          font-weight: 600;
           transition: all 0.25s ease;
         }
+
         .vaami-btn-view {
           background: #fff;
           color: #534AB7;
@@ -161,22 +179,27 @@ const ProductCard = ({ product }) => {
           text-align: center;
           text-decoration: none;
         }
+
         .vaami-btn-view:hover {
           background: #EEEDFE;
           color: #3C3489;
         }
+
         .vaami-btn-bag {
           background: #2e1065;
           color: #ffd6ff;
           width: 100%;
         }
+
         .vaami-btn-bag:hover {
           background: #3d1a80;
         }
+
         .vaami-btn-bag.added {
           background: #1a0840;
           color: #c4b5e8;
         }
+
       `}</style>
 
       <div className="vaami-card">
@@ -191,10 +214,8 @@ const ProductCard = ({ product }) => {
             alt={product.name}
           />
 
-          {/* New badge — show for recently added products */}
           <div className="vaami-badge">NEW</div>
 
-          {/* Wishlist */}
           <button
             className="vaami-wish"
             onClick={(e) => {
