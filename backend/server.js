@@ -6,13 +6,14 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import authRoutes from "./routers/auth.routes.js";
-import productRoutes from "./routers/product.routes.js";
-import orderRoutes from "./routers/order.routes.js";
+import authRoutes from "./routers/auth.routers.js";
+import productRoutes from "./routers/product.routers.js";
+import orderRoutes from "./routers/order.routers.js";
 import adminRoutes from "./routers/admin.routes.js";
 import createAdmin from "./utils/createAdmin.js";
 
 dotenv.config();
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
