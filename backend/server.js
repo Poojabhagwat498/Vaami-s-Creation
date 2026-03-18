@@ -25,13 +25,12 @@ const __dirname = path.dirname(__filename);
 /* ================== MIDDLEWARE ================== */
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // local frontend
-      "https://vaamis-creation-2026.netlify.app" // deployed frontend
-    ],
+    origin: ["http://localhost:5173", "https://vaamis-creation-2026.netlify.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   })
 );
+app.options("*", cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
