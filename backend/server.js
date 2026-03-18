@@ -23,14 +23,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /* ================== MIDDLEWARE ================== */
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://vaamis-creation-2026.netlify.app"
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://vaamis-creation-2026.netlify.app"],
+    origin: function (origin, callback) {
+       console.log("Incoming origin:", origin); 
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   })
 );
-app.options("*", cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
