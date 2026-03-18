@@ -36,9 +36,9 @@ const Bag = () => {
             <h1 style={s.bannerTitle}>My Bag</h1>
 
             <div style={s.divider}>
-              <div style={s.dividerLine}/>
+              <div style={s.dividerLine} />
               <span style={s.dividerGem}>◆</span>
-              <div style={s.dividerLine}/>
+              <div style={s.dividerLine} />
             </div>
 
             {bagItems.length > 0 && (
@@ -74,7 +74,7 @@ const Bag = () => {
 
                     <div style={s.imgWrap}>
                       <img
-                        src={`http://localhost:5000${item.image}`}
+                        src={`https://vaami-s-creation.onrender.com${item.image}`}
                         alt={item.name}
                         style={s.img}
                       />
@@ -147,7 +147,7 @@ const Bag = () => {
                   </div>
                 ))}
 
-                <div style={s.summaryDivider}/>
+                <div style={s.summaryDivider} />
 
                 <div style={s.summaryRow}>
                   <span style={s.totalLabel}>Total</span>
@@ -182,203 +182,203 @@ export default Bag;
 /* STYLES */
 const s = {
 
-  page:{
-    width:"100%",
-    background:"#faf8f5",
-    minHeight:"100vh",
-    fontFamily:"'Cormorant Garamond', serif"
+  page: {
+    width: "100%",
+    background: "#faf8f5",
+    minHeight: "100vh",
+    fontFamily: "'Cormorant Garamond', serif"
   },
 
-  banner:{
-    background:"#0f0018",
-    padding:"80px 40px",
-    textAlign:"center"
+  banner: {
+    background: "#0f0018",
+    padding: "80px 40px",
+    textAlign: "center"
   },
 
-  bannerInner:{maxWidth:"600px",margin:"0 auto"},
+  bannerInner: { maxWidth: "600px", margin: "0 auto" },
 
-  eyebrow:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"12px",
-    letterSpacing:"0.32em",
-    color:"rgba(255,214,255,0.4)"
+  eyebrow: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "12px",
+    letterSpacing: "0.32em",
+    color: "rgba(255,214,255,0.4)"
   },
 
-  bannerTitle:{
-    fontFamily:"'Cormorant Garamond', serif",
-    fontSize:"56px",
-    fontStyle:"italic",
-    color:"#ffd6ff"
+  bannerTitle: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: "56px",
+    fontStyle: "italic",
+    color: "#ffd6ff"
   },
 
-  bannerCount:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"14px",
-    letterSpacing:"0.22em",
-    color:"rgba(255,214,255,0.4)"
+  bannerCount: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "14px",
+    letterSpacing: "0.22em",
+    color: "rgba(255,214,255,0.4)"
   },
 
-  body:{
-    maxWidth:"1200px",
-    margin:"0 auto",
-    padding:"60px 40px"
+  body: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "60px 40px"
   },
 
-  emptyState:{
-    textAlign:"center",
-    padding:"80px"
+  emptyState: {
+    textAlign: "center",
+    padding: "80px"
   },
 
-  emptyTitle:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"24px"
+  emptyTitle: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "24px"
   },
 
-  emptySubtitle:{
-    fontSize:"18px",
-    fontStyle:"italic"
+  emptySubtitle: {
+    fontSize: "18px",
+    fontStyle: "italic"
   },
 
-  shopBtn:{
-    marginTop:"30px",
-    padding:"16px 40px",
-    fontFamily:"'Cinzel', serif",
-    fontSize:"14px",
-    background:"#0f0018",
-    color:"#ffd6ff",
-    border:"none",
-    cursor:"pointer"
+  shopBtn: {
+    marginTop: "30px",
+    padding: "16px 40px",
+    fontFamily: "'Cinzel', serif",
+    fontSize: "14px",
+    background: "#0f0018",
+    color: "#ffd6ff",
+    border: "none",
+    cursor: "pointer"
   },
 
-  layout:{
-    display:"grid",
-    gridTemplateColumns:"1fr 380px",
-    gap:"50px"
+  layout: {
+    display: "grid",
+    gridTemplateColumns: "1fr 380px",
+    gap: "50px"
   },
 
-  card:{
-    display:"flex",
-    gap:"24px",
-    padding:"30px",
-    borderBottom:"1px solid #eee"
+  card: {
+    display: "flex",
+    gap: "24px",
+    padding: "30px",
+    borderBottom: "1px solid #eee"
   },
 
-  imgWrap:{
-    width:"130px",
-    height:"130px",
-    overflow:"hidden"
+  imgWrap: {
+    width: "130px",
+    height: "130px",
+    overflow: "hidden"
   },
 
-  img:{
-    width:"100%",
-    height:"100%",
-    objectFit:"cover"
+  img: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover"
   },
 
-  cardBody:{flex:1},
+  cardBody: { flex: 1 },
 
-  cardCategory:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"12px",
-    letterSpacing:"0.2em"
+  cardCategory: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "12px",
+    letterSpacing: "0.2em"
   },
 
-  cardName:{
-    fontSize:"22px",
-    fontWeight:"600",
-    margin:"6px 0"
+  cardName: {
+    fontSize: "22px",
+    fontWeight: "600",
+    margin: "6px 0"
   },
 
-  cardPrice:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"20px",
-    color:"#2e1065"
+  cardPrice: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "20px",
+    color: "#2e1065"
   },
 
-  cardFooter:{
-    display:"flex",
-    justifyContent:"space-between",
-    marginTop:"20px"
+  cardFooter: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "20px"
   },
 
-  qtyRow:{
-    display:"flex",
-    alignItems:"center",
-    border:"1px solid #ddd"
+  qtyRow: {
+    display: "flex",
+    alignItems: "center",
+    border: "1px solid #ddd"
   },
 
-  qtyBtn:{
-    width:"40px",
-    height:"40px",
-    background:"#0f0018",
-    color:"#ffd6ff",
-    border:"none",
-    fontSize:"20px",
-    cursor:"pointer"
+  qtyBtn: {
+    width: "40px",
+    height: "40px",
+    background: "#0f0018",
+    color: "#ffd6ff",
+    border: "none",
+    fontSize: "20px",
+    cursor: "pointer"
   },
 
-  qtyNum:{
-    fontSize:"18px",
-    padding:"0 16px"
+  qtyNum: {
+    fontSize: "18px",
+    padding: "0 16px"
   },
 
-  removeBtn:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"12px",
-    padding:"10px 22px",
-    border:"1px solid #ddd",
-    background:"transparent",
-    cursor:"pointer"
+  removeBtn: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "12px",
+    padding: "10px 22px",
+    border: "1px solid #ddd",
+    background: "transparent",
+    cursor: "pointer"
   },
 
-  summaryCard:{
-    background:"#fff",
-    padding:"30px",
-    border:"1px solid #e8e2d9"
+  summaryCard: {
+    background: "#fff",
+    padding: "30px",
+    border: "1px solid #e8e2d9"
   },
 
-  summaryTitle:{
-    fontFamily:"'Cormorant Garamond', serif",
-    fontSize:"30px",
-    marginBottom:"20px"
+  summaryTitle: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: "30px",
+    marginBottom: "20px"
   },
 
-  summaryRow:{
-    display:"flex",
-    justifyContent:"space-between",
-    marginBottom:"12px"
+  summaryRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "12px"
   },
 
-  summaryItemName:{fontSize:"18px"},
-  summaryItemPrice:{fontSize:"16px"},
+  summaryItemName: { fontSize: "18px" },
+  summaryItemPrice: { fontSize: "16px" },
 
-  summaryDivider:{
-    height:"1px",
-    background:"#eee",
-    margin:"14px 0"
+  summaryDivider: {
+    height: "1px",
+    background: "#eee",
+    margin: "14px 0"
   },
 
-  totalLabel:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"16px"
+  totalLabel: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "16px"
   },
 
-  totalAmount:{
-    fontFamily:"'Cinzel', serif",
-    fontSize:"24px",
-    fontWeight:"600"
+  totalAmount: {
+    fontFamily: "'Cinzel', serif",
+    fontSize: "24px",
+    fontWeight: "600"
   },
 
-  checkoutBtn:{
-    marginTop:"20px",
-    width:"100%",
-    padding:"16px",
-    fontFamily:"'Cinzel', serif",
-    fontSize:"14px",
-    background:"#0f0018",
-    color:"#ffd6ff",
-    border:"none",
-    cursor:"pointer"
+  checkoutBtn: {
+    marginTop: "20px",
+    width: "100%",
+    padding: "16px",
+    fontFamily: "'Cinzel', serif",
+    fontSize: "14px",
+    background: "#0f0018",
+    color: "#ffd6ff",
+    border: "none",
+    cursor: "pointer"
   }
 
 };

@@ -5,7 +5,7 @@ const CategoryList = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/categories")
+    fetch("https://vaami-s-creation.onrender.com/api/categories")
       .then(res => res.json())
       .then(setCategories);
   }, []);

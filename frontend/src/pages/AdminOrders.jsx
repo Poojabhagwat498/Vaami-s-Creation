@@ -11,7 +11,7 @@ const AdminOrders = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
 
- const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch("https://vaami-s-creation.onrender.com/api/orders", {
         headers: {
           Authorization: `Bearer ${token}`
         }

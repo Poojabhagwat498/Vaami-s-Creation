@@ -4,7 +4,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/stats", {
+    fetch("https://vaami-s-creation.onrender.com/api/admin/stats", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }

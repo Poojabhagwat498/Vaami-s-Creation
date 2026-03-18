@@ -12,7 +12,7 @@ const ProductDetails = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`https://vaami-s-creation.onrender.com/api/products/${id}`)
       .then((res) => res.json())
       .then(setProduct)
       .catch(console.error);
@@ -69,7 +69,7 @@ const ProductDetails = () => {
             <div className="pd-image-frame">
               <div className={`pd-image-inner ${imgLoaded ? "loaded" : ""}`}>
                 <img
-                  src={`http://localhost:5000${product.image}`}
+                  src={`https://vaami-s-creation.onrender.com${product.image}`}
                   alt={product.name}
                   className="pd-img"
                   onLoad={() => setImgLoaded(true)}

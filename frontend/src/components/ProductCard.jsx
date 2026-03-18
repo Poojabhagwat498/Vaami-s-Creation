@@ -210,7 +210,7 @@ const ProductCard = ({ product }) => {
           onClick={() => navigate(`/product/${product._id}`)}
         >
           <img
-            src={`http://localhost:5000${product.image}`}
+            src={`https://vaami-s-creation.onrender.com${product.image}`}
             alt={product.name}
           />
 

@@ -4,11 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   base: '/',   // Should be '/' not '/some-subfolder/'
-  plugins: [react(),tailwindcss()],
+  plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      "/api": "http://localhost:5000",
-      "/images": "http://localhost:5000",
+      "/api": "https://vaami-s-creation.onrender.com",
+      "/images": "https://vaami-s-creation.onrender.com",
     }
   }
 });

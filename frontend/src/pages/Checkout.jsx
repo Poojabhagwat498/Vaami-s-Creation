@@ -40,7 +40,7 @@ const Checkout = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       if (!token) { alert("Please login first"); navigate("/login"); return; }
-      const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch("https://vaami-s-creation.onrender.com/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ items: bagItems, totalPrice: total, paymentMethod: "Card", deliveryAddress: formData }),

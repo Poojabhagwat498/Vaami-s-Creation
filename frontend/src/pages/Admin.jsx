@@ -37,7 +37,7 @@ const Admin = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/products");
+      const res = await fetch("https://vaami-s-creation.onrender.com/api/products");
       const data = await res.json();
       setProducts(data);
     } catch (err) {
@@ -50,7 +50,7 @@ const Admin = () => {
       setStatsLoading(true);
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
-      const res = await fetch("http://localhost:5000/api/admin/stats", {
+      const res = await fetch("https://vaami-s-creation.onrender.com/api/admin/stats", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -109,8 +109,8 @@ const Admin = () => {
       }
 
       const url = editingId
-        ? `http://localhost:5000/api/products/${editingId}`
-        : "http://localhost:5000/api/products";
+        ? `https://vaami-s-creation.onrender.com/api/products/${editingId}`
+        : "https://vaami-s-creation.onrender.com/api/products";
 
       const res = await fetch(url, {
         method: editingId ? "PUT" : "POST",
@@ -150,7 +150,7 @@ const Admin = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
-      await fetch(`http://localhost:5000/api/products/${id}`, {
+      await fetch(`https://vaami-s-creation.onrender.com/api/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -170,7 +170,7 @@ const Admin = () => {
       description: p.description || "",
       category: p.category || "",
     });
-    setImagePreview(`http://localhost:5000${p.image}`);
+    setImagePreview(`https://vaami-s-creation.onrender.com${p.image}`);
     setEditingId(p._id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -357,7 +357,7 @@ const Admin = () => {
                       }}
                     >
                       <img
-                        src={`http://localhost:5000${p.image}`}
+                        src={`https://vaami-s-creation.onrender.com${p.image}`}
                         alt={p.name}
                         style={s.thumb}
                       />
