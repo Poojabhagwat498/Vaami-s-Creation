@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 
+
 import authRoutes from "./routers/auth.routers.js";
 import productRoutes from "./routers/product.routers.js";
 import orderRoutes from "./routers/order.routers.js";
@@ -21,24 +22,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /* ================== CORS FIX ================== */
-const allowedOrigins = [,
-  "https://vaami-s-creation.vercel.app" // ✅ ADD THIS (IMPORTANT)
-];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      console.log("Incoming origin:", origin);
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.error("Blocked by CORS:", origin);
-        callback(new Error("CORS not allowed"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ include OPTIONS
-    credentials: true
+    origin: [
+      "https://vaami-s-creation-8nxy6nhpk-poojabhagwat498s-projects.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 
