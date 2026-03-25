@@ -21,9 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /* ================== CORS FIX ================== */
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://vaamis-creation-2026.netlify.app",
+const allowedOrigins = [,
   "https://vaami-s-creation.vercel.app" // ✅ ADD THIS (IMPORTANT)
 ];
 
