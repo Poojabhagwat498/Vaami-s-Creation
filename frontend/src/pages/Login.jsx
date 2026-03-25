@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 
-// ✅ Create axios instance (better practice)
-const API_URL = axios.create({
-  baseURL: import.meta.env.VITE_URL || "https://vaami-s-creation.onrender.com/api",
-  withCredentials: true, // ✅ important for CORS cookies/auth
+// ✅ Axios instance
+const API = axios.create({
+  baseURL:
+    import.meta.env.VITE_URL ||
+    "https://vaami-s-creation.onrender.com/api",
+  withCredentials: true,
 });
 
 
