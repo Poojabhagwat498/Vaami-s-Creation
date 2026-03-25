@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -14,7 +13,6 @@ import createAdmin from "./utils/createAdmin.js";
 
 dotenv.config();
 
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -22,26 +20,34 @@ const PORT = process.env.PORT || 5000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* ================== MIDDLEWARE ================== */
+/* ================== CORS FIX ================== */
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://vaamis-creation-2026.netlify.app"
+  "https://vaamis-creation-2026.netlify.app",
+  "https://vaami-s-creation.vercel.app" // ✅ ADD THIS (IMPORTANT)
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-       console.log("Incoming origin:", origin); 
+      console.log("Incoming origin:", origin);
+
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.error("Blocked by CORS:", origin);
         callback(new Error("CORS not allowed"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ include OPTIONS
     credentials: true
   })
 );
+
+// ✅ HANDLE PREFLIGHT (VERY IMPORTANT)
+app.options("*", cors());
+
+/* ================== MIDDLEWARE ================== */
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -62,10 +68,8 @@ mongoose
   .then(async () => {
     console.log("MongoDB connected successfully ✅");
 
-    // create admin user automatically if not exists
     await createAdmin();
 
-    /* ================== START SERVER ================== */
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT} 🚀`);
     });
@@ -73,4 +77,3 @@ mongoose
   .catch((error) => {
     console.error("MongoDB connection failed ❌", error);
   });
-
