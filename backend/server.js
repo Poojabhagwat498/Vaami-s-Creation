@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 
-
 import authRoutes from "./routers/auth.routers.js";
 import productRoutes from "./routers/product.routers.js";
 import orderRoutes from "./routers/order.routers.js";
@@ -21,22 +20,36 @@ const PORT = process.env.PORT || 5000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* ================== CORS FIX ================== */
+/* ================== CORS FIX (FINAL) ================== */
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://vaami-s-creation.vercel.app" // ✅ FIXED URL
+];
 
 app.use(
   cors({
-   origin: [
-  "http://localhost:5173",
-  "https:vaami-s-creation.vercel.app",
-   "https://vaami-s-creation.onrender.com",
-],
+    origin: function (origin, callback) {
+      // allow requests without origin (Postman / mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed: " + origin));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 
-// ✅ HANDLE PREFLIGHT (VERY IMPORTANT)
-app.options("*", cors());
+// ✅ HANDLE PREFLIGHT REQUESTS
+app.options("*", cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 /* ================== MIDDLEWARE ================== */
 app.use(express.json());
