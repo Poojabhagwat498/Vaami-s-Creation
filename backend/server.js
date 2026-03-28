@@ -24,26 +24,28 @@ const __dirname = path.dirname(__filename);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
-  "https://vaami-s-creation.vercel.app" // ✅ FIXED URL
+  "https://vaami-s-creation.vercel.app"
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests without origin (Postman / mobile apps)
-      if (!origin) return callback(null, true);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
 
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed: " + origin));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+
 
 // ✅ HANDLE PREFLIGHT REQUESTS
 app.options("*", cors({
