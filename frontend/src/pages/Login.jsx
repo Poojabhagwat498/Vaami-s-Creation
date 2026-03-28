@@ -6,11 +6,9 @@ import axios from "axios";
 // ✅ Axios instance
 const API = axios.create({
   baseURL:
-    import.meta.env.VITE_URL ||
-    "https://vaami-s-creation.onrender.com/api",
+    import.meta.env.VITE_URL,
   withCredentials: true,
 });
-
 
 function Login() {
   const navigate = useNavigate();

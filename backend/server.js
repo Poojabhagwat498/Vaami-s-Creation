@@ -28,6 +28,7 @@ app.use(
    origin: [
   "http://localhost:5173",
   "https://vaami-s-creation-8nxy6nhpk-poojabhagwat498s-projects.vercel.app",
+   "https://vaami-s-creation.onrender.com",
 ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
