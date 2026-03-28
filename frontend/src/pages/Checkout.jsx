@@ -6,21 +6,12 @@ const Checkout = () => {
   const { bagItems, removeFromBag } = useBag();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState(null);
 
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    area: "",
-    city: "",
-    state: "",
-    pincode: "",
+    name: "", phone: "", area: "", city: "", state: "", pincode: "",
   });
 
-  const total = bagItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const total = bagItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,7 +23,7 @@ const Checkout = () => {
 
   const placeOrder = async () => {
     if (!formData.name || !formData.phone || !formData.area ||
-      !formData.city || !formData.state || !formData.pincode) {
+        !formData.city || !formData.state || !formData.pincode) {
       alert("Please fill all address details");
       return;
     }
@@ -43,7 +34,10 @@ const Checkout = () => {
       const res = await fetch("https://vaami-s-creation.onrender.com/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ items: bagItems, totalPrice: total, paymentMethod: "Card", deliveryAddress: formData }),
+        body: JSON.stringify({
+          items: bagItems, totalPrice: total,
+          paymentMethod: "Card", deliveryAddress: formData
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
@@ -59,12 +53,12 @@ const Checkout = () => {
   };
 
   const fields = [
-    { name: "name", label: "Full Name", type: "text", icon: "👤", span: 2 },
-    { name: "phone", label: "Phone Number", type: "tel", icon: "📞", span: 2 },
-    { name: "area", label: "Area / Street", type: "text", icon: "🏘️", span: 2 },
-    { name: "city", label: "City", type: "text", icon: "🏙️", span: 1 },
-    { name: "state", label: "State", type: "text", icon: "📍", span: 1 },
-    { name: "pincode", label: "Pincode", type: "number", icon: "🔢", span: 2 },
+    { name: "name",    label: "Full Name",     type: "text",   icon: "👤", span: 2 },
+    { name: "phone",   label: "Phone Number",  type: "tel",    icon: "📞", span: 2 },
+    { name: "area",    label: "Area / Street", type: "text",   icon: "🏘️", span: 2 },
+    { name: "city",    label: "City",          type: "text",   icon: "🏙️", span: 1 },
+    { name: "state",   label: "State",         type: "text",   icon: "📍", span: 1 },
+    { name: "pincode", label: "Pincode",       type: "number", icon: "🔢", span: 2 },
   ];
 
   return (
@@ -78,8 +72,8 @@ const Checkout = () => {
           min-height: 100vh;
           background: #0d0f1a;
           background-image:
-            radial-gradient(ellipse at 20% 10%, rgba(180, 140, 60, 0.07) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 90%, rgba(100, 80, 180, 0.08) 0%, transparent 55%);
+            radial-gradient(ellipse at 20% 10%, rgba(180,140,60,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 90%, rgba(100,80,180,0.08) 0%, transparent 55%);
           display: flex;
           justify-content: center;
           align-items: flex-start;
@@ -95,9 +89,10 @@ const Checkout = () => {
 
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(24px); }
-          to { opacity: 1; transform: translateY(0); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
+        /* ── Header ── */
         .checkout-header {
           text-align: center;
           margin-bottom: 40px;
@@ -129,6 +124,7 @@ const Checkout = () => {
           margin: 18px auto 0;
         }
 
+        /* ── Section Card ── */
         .section-card {
           background: rgba(255,255,255,0.03);
           border: 1px solid rgba(255,255,255,0.07);
@@ -145,7 +141,7 @@ const Checkout = () => {
           position: absolute;
           top: 0; left: 0; right: 0;
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(184, 145, 42, 0.4), transparent);
+          background: linear-gradient(90deg, transparent, rgba(184,145,42,0.4), transparent);
         }
 
         .section-label {
@@ -166,15 +162,17 @@ const Checkout = () => {
         .section-label-icon {
           width: 32px;
           height: 32px;
-          background: rgba(184, 145, 42, 0.12);
-          border: 1px solid rgba(184, 145, 42, 0.25);
+          background: rgba(184,145,42,0.12);
+          border: 1px solid rgba(184,145,42,0.25);
           border-radius: 8px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 14px;
+          flex-shrink: 0;
         }
 
+        /* ── Form Grid ── */
         .form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -239,24 +237,21 @@ const Checkout = () => {
         }
 
         .field-input::-webkit-outer-spin-button,
-        .field-input::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-        }
+        .field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-        .field-input::placeholder {
-          color: #3a3a5a;
-        }
+        .field-input::placeholder { color: #3a3a5a; }
 
         .field-input:focus {
-          background: rgba(184, 145, 42, 0.06);
-          border-color: rgba(184, 145, 42, 0.45);
-          box-shadow: 0 0 0 3px rgba(184, 145, 42, 0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+          background: rgba(184,145,42,0.06);
+          border-color: rgba(184,145,42,0.45);
+          box-shadow: 0 0 0 3px rgba(184,145,42,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         .field-input:not(:placeholder-shown) {
           border-color: rgba(255,255,255,0.15);
         }
 
+        /* ── Clear button ── */
         .delete-btn {
           display: flex;
           align-items: center;
@@ -281,6 +276,7 @@ const Checkout = () => {
           border-color: rgba(255,80,80,0.4);
         }
 
+        /* ── Order summary ── */
         .order-items {
           display: flex;
           flex-direction: column;
@@ -297,16 +293,20 @@ const Checkout = () => {
           border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.05);
           transition: background 0.2s;
+          gap: 10px;
         }
 
-        .order-item:hover {
-          background: rgba(255,255,255,0.05);
-        }
+        .order-item:hover { background: rgba(255,255,255,0.05); }
 
         .order-item-name {
           font-size: 14px;
           color: #c8c0e0;
           font-weight: 400;
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .order-item-qty {
@@ -315,12 +315,14 @@ const Checkout = () => {
           background: rgba(255,255,255,0.06);
           padding: 3px 10px;
           border-radius: 20px;
+          flex-shrink: 0;
         }
 
         .order-item-price {
           font-size: 14px;
           color: #b8912a;
           font-weight: 500;
+          flex-shrink: 0;
         }
 
         .total-row {
@@ -328,9 +330,10 @@ const Checkout = () => {
           justify-content: space-between;
           align-items: center;
           padding: 18px 16px;
-          background: rgba(184, 145, 42, 0.07);
-          border: 1px solid rgba(184, 145, 42, 0.18);
+          background: rgba(184,145,42,0.07);
+          border: 1px solid rgba(184,145,42,0.18);
           border-radius: 12px;
+          gap: 12px;
         }
 
         .total-label {
@@ -346,8 +349,10 @@ const Checkout = () => {
           font-size: 26px;
           font-weight: 700;
           color: #d4a830;
+          flex-shrink: 0;
         }
 
+        /* ── Pay button ── */
         .pay-btn {
           width: 100%;
           padding: 18px;
@@ -366,7 +371,7 @@ const Checkout = () => {
           position: relative;
           overflow: hidden;
           margin-top: 8px;
-          box-shadow: 0 4px 24px rgba(184, 145, 42, 0.25);
+          box-shadow: 0 4px 24px rgba(184,145,42,0.25);
         }
 
         .pay-btn::after {
@@ -378,13 +383,11 @@ const Checkout = () => {
           transition: left 0.5s ease;
         }
 
-        .pay-btn:hover::after {
-          left: 100%;
-        }
+        .pay-btn:hover::after { left: 100%; }
 
         .pay-btn:hover:not(:disabled) {
           background-position: right center;
-          box-shadow: 0 6px 32px rgba(184, 145, 42, 0.4);
+          box-shadow: 0 6px 32px rgba(184,145,42,0.4);
           transform: translateY(-1px);
         }
 
@@ -412,9 +415,7 @@ const Checkout = () => {
           animation: spin 0.7s linear infinite;
         }
 
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .secure-notice {
           display: flex;
@@ -425,6 +426,8 @@ const Checkout = () => {
           font-size: 11px;
           color: #4a4a6a;
           letter-spacing: 0.5px;
+          flex-wrap: wrap;
+          text-align: center;
         }
 
         .secure-dot {
@@ -432,6 +435,164 @@ const Checkout = () => {
           height: 5px;
           background: #3a3a5a;
           border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        /* ════════════════════════════════
+           MEDIA QUERIES
+        ════════════════════════════════ */
+
+        /* ── Tablet (max 768px) ── */
+        @media (max-width: 768px) {
+          .checkout-page {
+            padding: 36px 16px 64px;
+          }
+
+          .checkout-title {
+            font-size: 36px;
+          }
+
+          .checkout-header {
+            margin-bottom: 28px;
+          }
+
+          .section-card {
+            padding: 24px 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+          }
+
+          .section-label-text {
+            font-size: 18px;
+          }
+
+          /* City & State stack to full width on tablet */
+          .field-group.half {
+            grid-column: span 2;
+          }
+
+          .total-amount {
+            font-size: 22px;
+          }
+
+          .pay-btn {
+            padding: 16px;
+            font-size: 14px;
+          }
+        }
+
+        /* ── Mobile (max 480px) ── */
+        @media (max-width: 480px) {
+          .checkout-page {
+            padding: 24px 12px 52px;
+          }
+
+          .checkout-eyebrow {
+            font-size: 10px;
+            letter-spacing: 3px;
+          }
+
+          .checkout-title {
+            font-size: 28px;
+          }
+
+          .checkout-header {
+            margin-bottom: 22px;
+          }
+
+          .section-card {
+            padding: 18px 14px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+          }
+
+          .section-label {
+            margin-bottom: 18px;
+            gap: 8px;
+          }
+
+          .section-label-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+          }
+
+          .section-label-text {
+            font-size: 16px;
+          }
+
+          /* All form fields full width on small screens */
+          .form-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+
+          .field-group,
+          .field-group.half {
+            grid-column: span 1;
+          }
+
+          .field-input {
+            padding: 12px 14px 12px 38px;
+            font-size: 13px;
+            border-radius: 10px;
+          }
+
+          .field-label {
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+          }
+
+          .order-item {
+            padding: 12px;
+            border-radius: 8px;
+          }
+
+          .order-item-name {
+            font-size: 13px;
+          }
+
+          .order-item-price {
+            font-size: 13px;
+          }
+
+          .total-row {
+            padding: 14px 12px;
+          }
+
+          .total-label {
+            font-size: 16px;
+          }
+
+          .total-amount {
+            font-size: 20px;
+          }
+
+          .pay-btn {
+            padding: 15px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            border-radius: 12px;
+          }
+
+          .delete-btn {
+            font-size: 11px;
+            padding: 6px 12px;
+          }
+
+          .secure-notice {
+            font-size: 10px;
+            gap: 5px;
+          }
+        }
+
+        /* ── Very small (max 360px) ── */
+        @media (max-width: 360px) {
+          .checkout-title  { font-size: 24px; }
+          .section-card    { padding: 16px 12px; }
+          .total-amount    { font-size: 18px; }
+          .pay-btn         { font-size: 12px; padding: 13px; }
         }
       `}</style>
 
@@ -506,14 +667,9 @@ const Checkout = () => {
           <button className="pay-btn" onClick={placeOrder} disabled={loading}>
             <div className="pay-btn-inner">
               {loading ? (
-                <>
-                  <div className="spinner" />
-                  Processing Order...
-                </>
+                <><div className="spinner" />Processing Order...</>
               ) : (
-                <>
-                  🔒 Pay ₹{total.toLocaleString()} Now
-                </>
+                <>🔒 Pay ₹{total.toLocaleString()} Now</>
               )}
             </div>
           </button>

@@ -8,7 +8,12 @@ import watch11 from '../images/watch11.jpg';
 
 const fonts = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500&display=swap');
-  @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
   .menu-card { animation: fadeUp 0.6s ease both; }
   .menu-card:nth-child(1) { animation-delay: 0.05s; }
   .menu-card:nth-child(2) { animation-delay: 0.13s; }
@@ -30,6 +35,116 @@ const fonts = `
 
   .menu-card .card-gem { transition: opacity 0.3s ease; }
   .menu-card:hover .card-gem { opacity: 1 !important; }
+
+  /* ── Tablet (max 1024px) ── */
+  @media (max-width: 1024px) {
+    .menu-section {
+      padding: 48px 28px 80px !important;
+    }
+    .row-large {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 14px !important;
+    }
+    .row-small {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 14px !important;
+    }
+    .card-large {
+      height: 320px !important;
+    }
+    .card-small {
+      height: 230px !important;
+    }
+    .menu-banner {
+      padding: 60px 28px 56px !important;
+    }
+  }
+
+  /* ── Mobile (max 768px) ── */
+  @media (max-width: 768px) {
+    .menu-banner {
+      padding: 48px 20px 44px !important;
+    }
+    .banner-title {
+      font-size: 2.2rem !important;
+    }
+    .menu-section {
+      padding: 36px 16px 64px !important;
+      gap: 14px !important;
+    }
+
+    /* Stack all cards into a single column */
+    .row-large {
+      grid-template-columns: 1fr !important;
+      gap: 14px !important;
+    }
+    .row-small {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 14px !important;
+    }
+
+    .card-large {
+      height: 260px !important;
+    }
+    .card-small {
+      height: 200px !important;
+    }
+
+    .card-label-large {
+      font-size: 1.9rem !important;
+    }
+    .card-label-small {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  /* ── Small Mobile (max 480px) ── */
+  @media (max-width: 480px) {
+    .menu-banner {
+      padding: 36px 16px 34px !important;
+    }
+    .banner-eyebrow {
+      font-size: 8px !important;
+      letter-spacing: 0.2em !important;
+    }
+    .banner-title {
+      font-size: 1.8rem !important;
+    }
+    .banner-sub {
+      font-size: 14px !important;
+    }
+    .menu-section {
+      padding: 28px 12px 48px !important;
+      gap: 10px !important;
+    }
+
+    /* All cards full-width single column */
+    .row-large,
+    .row-small {
+      grid-template-columns: 1fr !important;
+      gap: 10px !important;
+    }
+
+    .card-large {
+      height: 220px !important;
+    }
+    .card-small {
+      height: 190px !important;
+    }
+
+    .card-label-large {
+      font-size: 1.6rem !important;
+    }
+    .card-label-small {
+      font-size: 1.4rem !important;
+    }
+    .card-desc {
+      font-size: 12px !important;
+    }
+    .card-content {
+      padding: 20px 16px !important;
+    }
+  }
 `;
 
 const categories = [
@@ -50,42 +165,50 @@ const Menu = () => {
       <div style={s.page}>
 
         {/* ── Banner ── */}
-        <div style={s.banner}>
+        <div style={s.banner} className="menu-banner">
           <div style={s.bannerInner}>
-            <p style={s.eyebrow}>VAAMI'S CREATIONS</p>
-            <h1 style={s.bannerTitle}>Our Collections</h1>
+            <p style={s.eyebrow} className="banner-eyebrow">VAAMI'S CREATIONS</p>
+
+            <h1 style={s.bannerTitle} className="banner-title">Our Collections</h1>
+
             <div style={s.divider}>
               <div style={s.dividerLine} />
               <span style={s.dividerGem}>◆</span>
               <div style={s.dividerLine} />
             </div>
-            <p style={s.bannerSub}>
+
+            <p style={s.bannerSub} className="banner-sub">
               Discover handcrafted jewellery made to celebrate you
             </p>
           </div>
         </div>
 
         {/* ── Grid ── */}
-        <section style={s.section}>
+        <section style={s.section} className="menu-section">
 
           {/* Large feature row — first 2 cards */}
-          <div style={s.rowLarge}>
+          <div style={s.rowLarge} className="row-large">
             {categories.slice(0, 2).map((cat) => (
               <Link
                 to={cat.path}
                 key={cat.name}
-                className="menu-card"
+                className="menu-card card-large"
                 style={s.cardLarge}
                 onMouseEnter={() => setHovered(cat.name)}
                 onMouseLeave={() => setHovered(null)}
               >
                 <img src={cat.image} alt={cat.name} style={s.cardImg} />
                 <div className="card-overlay" style={s.overlay} />
-                <div style={s.cardContent}>
+                <div style={s.cardContent} className="card-content">
                   <span className="card-gem" style={s.cardGem}>◈</span>
                   <p style={s.cardCategory}>COLLECTION</p>
-                  <h2 className="card-label" style={s.cardLabelLarge}>{cat.name}</h2>
-                  <p style={s.cardDesc}>{cat.desc}</p>
+                  <h2
+                    className="card-label card-label-large"
+                    style={s.cardLabelLarge}
+                  >
+                    {cat.name}
+                  </h2>
+                  <p style={s.cardDesc} className="card-desc">{cat.desc}</p>
                   <span className="card-arrow" style={s.cardArrow}>EXPLORE →</span>
                 </div>
               </Link>
@@ -93,23 +216,28 @@ const Menu = () => {
           </div>
 
           {/* Small row — last 3 cards */}
-          <div style={s.rowSmall}>
+          <div style={s.rowSmall} className="row-small">
             {categories.slice(2).map((cat) => (
               <Link
                 to={cat.path}
                 key={cat.name}
-                className="menu-card"
+                className="menu-card card-small"
                 style={s.cardSmall}
                 onMouseEnter={() => setHovered(cat.name)}
                 onMouseLeave={() => setHovered(null)}
               >
                 <img src={cat.image} alt={cat.name} style={s.cardImg} />
                 <div className="card-overlay" style={s.overlay} />
-                <div style={s.cardContent}>
+                <div style={s.cardContent} className="card-content">
                   <span className="card-gem" style={s.cardGem}>◈</span>
                   <p style={s.cardCategory}>COLLECTION</p>
-                  <h2 className="card-label" style={s.cardLabelSmall}>{cat.name}</h2>
-                  <p style={s.cardDesc}>{cat.desc}</p>
+                  <h2
+                    className="card-label card-label-small"
+                    style={s.cardLabelSmall}
+                  >
+                    {cat.name}
+                  </h2>
+                  <p style={s.cardDesc} className="card-desc">{cat.desc}</p>
                   <span className="card-arrow" style={s.cardArrow}>EXPLORE →</span>
                 </div>
               </Link>
@@ -117,7 +245,6 @@ const Menu = () => {
           </div>
 
         </section>
-
       </div>
     </>
   );
@@ -125,7 +252,9 @@ const Menu = () => {
 
 export default Menu;
 
-/* ── Styles ── */
+/* ─────────────────────────────────────────
+   Base styles (desktop-first)
+───────────────────────────────────────── */
 const s = {
   page: {
     width: "100%",
@@ -153,7 +282,7 @@ const s = {
   },
   bannerTitle: {
     fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: "clamp(2.4rem, 6vw, 4rem)",
+    fontSize: "clamp(1.8rem, 6vw, 4rem)",
     fontWeight: 300,
     fontStyle: "italic",
     color: "#ffd6ff",

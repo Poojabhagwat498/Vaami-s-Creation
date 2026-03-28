@@ -1,4 +1,3 @@
-
 import { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { useBag } from "../context/BagContext";
@@ -43,6 +42,45 @@ const fonts = `
   from { opacity:0; transform:translateY(-12px); }
   to { opacity:1; transform:translateY(0); }
 }
+
+/* ── Tablet (max 1024px) ── */
+@media (max-width: 1024px) {
+  .desktop-nav { display: none !important; }
+  .hamburger-btn { display: flex !important; }
+  .search-wrap { max-width: 280px !important; }
+  .main-nav { padding: 0 24px !important; height: 80px !important; }
+  .top-bar { padding: 10px 24px !important; }
+  .logo-name-el { font-size: 22px !important; }
+  .logo-tagline-el { font-size: 15px !important; }
+  .logo-img-el { width: 56px !important; height: 56px !important; }
+}
+
+/* ── Mobile (max 640px) ── */
+@media (max-width: 640px) {
+  .top-bar { padding: 8px 16px !important; }
+  .top-bar-text { font-size: 11px !important; letter-spacing: 0.15em !important; }
+  .top-bar-right { gap: 16px !important; }
+  .top-bar-link-el { font-size: 12px !important; }
+
+  .main-nav { padding: 0 16px !important; height: 68px !important; }
+
+  .logo-img-el { width: 44px !important; height: 44px !important; }
+  .logo-name-el { font-size: 17px !important; }
+  .logo-tagline-el { font-size: 12px !important; }
+  .logo-gap { gap: 10px !important; }
+
+  .search-wrap { display: none !important; }
+
+  .mobile-menu { padding: 6px 0 !important; }
+  .mobile-link-el { padding: 14px 20px !important; font-size: 14px !important; }
+}
+
+/* ── Very small screens (max 380px) ── */
+@media (max-width: 380px) {
+  .logo-tagline-el { display: none !important; }
+  .logo-name-el { font-size: 15px !important; }
+  .top-bar-text { display: none !important; }
+}
 `;
 
 const Layout = () => {
@@ -60,7 +98,6 @@ const Layout = () => {
 
   useEffect(() => {
     if (!location.pathname.startsWith("/home")) return;
-
     if (debouncedQuery.trim()) {
       navigate(`/home?search=${debouncedQuery}`);
     } else {
@@ -81,11 +118,11 @@ const Layout = () => {
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-    { to: "/home", label: "Home" },
+    { to: "/home",     label: "Home" },
     { to: "/wishlist", label: "Wishlist" },
-    { to: "/menu", label: "Menu" },
-    { to: "/orders", label: "Orders" },
-    { to: "/me", label: "Me" }
+    { to: "/menu",     label: "Menu" },
+    { to: "/orders",   label: "Orders" },
+    { to: "/me",       label: "Me" }
   ];
 
   return (
@@ -98,22 +135,30 @@ const Layout = () => {
           boxShadow: scrolled ? "0 6px 28px rgba(15,0,24,0.12)" : "none"
         }}
       >
-        {/* Top Bar */}
-        <div style={s.topBar}>
+        {/* ── Top Bar ── */}
+        <div style={s.topBar} className="top-bar">
           <div style={s.topBarInner}>
-            <span style={s.topBarText}>
+            <span style={s.topBarText} className="top-bar-text">
               ✦ Free Shipping on all orders · Handcrafted with Love ✦
             </span>
 
-            <div style={s.topBarRight}>
+            <div style={s.topBarRight} className="top-bar-right">
               {!user && (
-                <Link to="/login" style={s.topBarLink} className="top-bar-link">
+                <Link
+                  to="/login"
+                  style={s.topBarLink}
+                  className="top-bar-link top-bar-link-el"
+                >
                   Login
                 </Link>
               )}
 
               {user?.role === "admin" && (
-                <Link to="/admin" style={s.topBarLink} className="top-bar-link">
+                <Link
+                  to="/admin"
+                  style={s.topBarLink}
+                  className="top-bar-link top-bar-link-el"
+                >
                   Admin Panel
                 </Link>
               )}
@@ -121,23 +166,31 @@ const Layout = () => {
           </div>
         </div>
 
-        {/* Main Navbar */}
-        <div style={s.mainNav}>
+        {/* ── Main Navbar ── */}
+        <div style={s.mainNav} className="main-nav">
+
           {/* Logo */}
-          <Link to="/home" className="logo-link" style={s.logoLink}>
-            <img src="/logo.jpeg" alt="logo" style={s.logoImg} />
+          <Link to="/home" className="logo-link logo-gap" style={s.logoLink}>
+            <img
+              src="/logo.jpeg"
+              alt="logo"
+              style={s.logoImg}
+              className="logo-img-el"
+            />
 
             <div style={s.logoText}>
-              <span className="logo-name" style={s.logoName}>
+              <span className="logo-name logo-name-el" style={s.logoName}>
                 Vaami's Creation
               </span>
 
-              <span style={s.logoTagline}>Handcrafted Jewellery</span>
+              <span style={s.logoTagline} className="logo-tagline-el">
+                Handcrafted Jewellery
+              </span>
             </div>
           </Link>
 
-          {/* Search */}
-          <div style={s.searchWrap}>
+          {/* Search — hidden on mobile via CSS */}
+          <div style={s.searchWrap} className="search-wrap">
             <span style={s.searchIcon}></span>
 
             <input
@@ -150,8 +203,8 @@ const Layout = () => {
             />
           </div>
 
-          {/* Desktop Nav */}
-          <nav style={s.nav}>
+          {/* Desktop Nav — hidden on tablet/mobile via CSS */}
+          <nav style={s.nav} className="desktop-nav">
             {navLinks.map(({ to, label }) => (
               <Link
                 key={to}
@@ -171,13 +224,9 @@ const Layout = () => {
             <Link
               to="/bag"
               className={`nav-link${isActive("/bag") ? " active" : ""}`}
-              style={{
-                ...s.navLink,
-                ...s.bagLink
-              }}
+              style={{ ...s.navLink, ...s.bagLink }}
             >
               Bag
-
               {bagItems.length > 0 && (
                 <span className="bag-badge" style={s.bagBadge}>
                   {bagItems.length}
@@ -186,25 +235,33 @@ const Layout = () => {
             </Link>
           </nav>
 
-          {/* Mobile Button */}
+          {/* Hamburger — shown on tablet/mobile via CSS */}
           <button
             style={s.hamburger}
+            className="hamburger-btn"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
           >
-            ☰
+            {mobileOpen ? "✕" : "☰"}
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* ── Mobile / Tablet Dropdown Menu ── */}
         {mobileOpen && (
-          <div style={s.mobileMenu}>
+          <div style={s.mobileMenu} className="mobile-menu">
             {[...navLinks, { to: "/bag", label: `Bag (${bagItems.length})` }].map(
               ({ to, label }) => (
                 <Link
                   key={to}
                   to={to}
-                  className="mobile-link"
-                  style={s.mobileLink}
+                  className="mobile-link mobile-link-el"
+                  style={{
+                    ...s.mobileLink,
+                    background: isActive(to) ? "#faf8f5" : "transparent",
+                    color: isActive(to) ? "#0f0018" : "#1a1020",
+                    fontWeight: isActive(to) ? "600" : "400",
+                    borderLeft: isActive(to) ? "3px solid #0f0018" : "3px solid transparent"
+                  }}
                 >
                   {label}
                 </Link>
@@ -212,13 +269,21 @@ const Layout = () => {
             )}
 
             {!user && (
-              <Link to="/login" style={s.mobileLink} className="mobile-link">
+              <Link
+                to="/login"
+                style={s.mobileLink}
+                className="mobile-link mobile-link-el"
+              >
                 Login
               </Link>
             )}
 
             {user?.role === "admin" && (
-              <Link to="/admin" style={s.mobileLink} className="mobile-link">
+              <Link
+                to="/admin"
+                style={s.mobileLink}
+                className="mobile-link mobile-link-el"
+              >
                 Admin Panel
               </Link>
             )}
@@ -233,6 +298,9 @@ const Layout = () => {
 
 export default Layout;
 
+/* ─────────────────────────────────────────
+   Base styles (desktop-first)
+───────────────────────────────────────── */
 const s = {
   header: {
     position: "sticky",
@@ -252,7 +320,8 @@ const s = {
     maxWidth: "1500px",
     margin: "auto",
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    alignItems: "center"
   },
 
   topBarText: {
@@ -294,7 +363,9 @@ const s = {
   logoImg: {
     width: "70px",
     height: "70px",
-    borderRadius: "50%"
+    borderRadius: "50%",
+    objectFit: "cover",
+    flexShrink: 0
   },
 
   logoText: {
@@ -306,38 +377,47 @@ const s = {
     fontFamily: "Cinzel",
     fontSize: "28px",
     fontWeight: "700",
-    color: "#0f0018"
+    color: "#0f0018",
+    whiteSpace: "nowrap"
   },
 
   logoTagline: {
     fontSize: "18px",
     fontStyle: "italic",
-    color: "#4a3050"
+    color: "#4a3050",
+    whiteSpace: "nowrap"
   },
 
   searchWrap: {
     flex: 1,
     maxWidth: "420px",
-    position: "relative"
+    position: "relative",
+    margin: "0 24px"
   },
 
   searchIcon: {
     position: "absolute",
     left: "14px",
-    top: "12px"
+    top: "50%",
+    transform: "translateY(-50%)",
+    pointerEvents: "none"
   },
 
   searchInput: {
     width: "100%",
-    padding: "14px 16px 14px 40px",
-    fontSize: "18px",
+    padding: "12px 16px 12px 40px",
+    fontSize: "16px",
     background: "#faf8f5",
-    border: "1.5px solid #c8c0bc"
+    border: "1.5px solid #c8c0bc",
+    borderRadius: "2px",
+    boxSizing: "border-box",
+    fontFamily: "'Cormorant Garamond', serif"
   },
 
   nav: {
     display: "flex",
-    gap: "38px"
+    gap: "38px",
+    alignItems: "center"
   },
 
   navLink: {
@@ -355,19 +435,32 @@ const s = {
     position: "absolute",
     top: "-10px",
     right: "-14px",
-    width: "24px",
-    height: "24px",
+    width: "22px",
+    height: "22px",
     borderRadius: "50%",
     background: "#0f0018",
     color: "#ffd6ff",
-    fontSize: "12px",
+    fontSize: "11px",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    fontFamily: "Cinzel"
   },
 
+  /* hidden by default; CSS media query sets display:flex on ≤1024px */
   hamburger: {
-    display: "none"
+    display: "none",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "none",
+    border: "1.5px solid #0f0018",
+    borderRadius: "4px",
+    width: "42px",
+    height: "42px",
+    fontSize: "20px",
+    cursor: "pointer",
+    color: "#0f0018",
+    flexShrink: 0
   },
 
   mobileMenu: {
@@ -375,15 +468,16 @@ const s = {
     flexDirection: "column",
     background: "#fff",
     borderTop: "1px solid #ddd8d2",
-    padding: "10px 0"
+    padding: "10px 0",
+    animation: "mobileMenuIn 0.22s ease"
   },
 
   mobileLink: {
-    padding: "18px 40px",
-    fontSize: "16px",
+    padding: "16px 40px",
+    fontSize: "15px",
     fontFamily: "Cinzel",
     textDecoration: "none",
-    color: "#1a1020"
+    letterSpacing: "0.12em",
+    transition: "background 0.2s, color 0.2s"
   }
 };
-

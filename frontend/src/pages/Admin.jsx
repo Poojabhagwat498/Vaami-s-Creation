@@ -21,45 +21,115 @@ const fonts = `
   .admin-submit:hover { background: #0f0018 !important; letter-spacing: 0.28em !important; }
   .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,0,24,0.14) !important; }
   .product-row:hover { background: #f0ece8 !important; }
+
+  /* ── Tablet (max 1200px) ── */
+  @media (max-width: 1200px) {
+    .admin-body        { padding: 44px 28px 80px !important; }
+    .admin-main-layout { grid-template-columns: 380px 1fr !important; gap: 28px !important; }
+    .stat-value        { font-size: 36px !important; }
+  }
+
+  /* ── Tablet (max 1024px) — stack form above product list ── */
+  @media (max-width: 1024px) {
+    .admin-banner      { padding: 56px 28px 50px !important; }
+    .admin-body        { padding: 36px 24px 72px !important; }
+    .admin-stats-row   { gap: 16px !important; margin-bottom: 36px !important; }
+    .stat-card-inner   { padding: 24px 16px 20px !important; }
+    .stat-value        { font-size: 32px !important; }
+    .stat-icon         { font-size: 20px !important; margin-bottom: 10px !important; }
+
+    /* Form + product list become single column */
+    .admin-main-layout {
+      grid-template-columns: 1fr !important;
+      gap: 28px !important;
+    }
+    /* Un-stick the form on tablet/mobile */
+    .admin-form-wrap   { position: static !important; }
+  }
+
+  /* ── Mobile (max 768px) ── */
+  @media (max-width: 768px) {
+    .admin-banner      { padding: 44px 16px 40px !important; }
+    .banner-sub        { font-size: 16px !important; }
+
+    .admin-body        { padding: 28px 14px 60px !important; }
+
+    /* Stats — single column */
+    .admin-stats-row   { grid-template-columns: 1fr !important; gap: 12px !important; margin-bottom: 28px !important; }
+    .stat-card-inner   { padding: 20px 16px !important; display: flex !important; align-items: center !important; text-align: left !important; gap: 16px !important; }
+    .stat-icon         { margin-bottom: 0 !important; font-size: 22px !important; }
+    .stat-text         { display: flex; flex-direction: column; }
+    .stat-value        { font-size: 28px !important; margin: 0 !important; }
+    .stat-label        { margin: 2px 0 4px !important; }
+
+    /* Form */
+    .admin-form-inner  { padding: 22px 18px !important; }
+    .form-header-inner { padding: 20px 22px !important; }
+    .panel-header-inner{ padding: 20px 22px !important; }
+
+    /* Product row — tighten spacing */
+    .product-row-inner { padding: 14px 16px !important; gap: 12px !important; }
+    .product-thumb     { width: 56px !important; height: 56px !important; }
+    .product-name      { font-size: 16px !important; }
+    .product-price     { font-size: 13px !important; }
+
+    /* Action buttons — smaller */
+    .row-action-btn    { padding: 8px 14px !important; font-size: 10px !important; }
+
+    /* Toast — full width */
+    .admin-toast       { left: 12px !important; right: 12px !important; transform: none !important; white-space: normal !important; text-align: center !important; padding: 12px 18px !important; }
+  }
+
+  /* ── Small Mobile (max 480px) ── */
+  @media (max-width: 480px) {
+    .admin-banner      { padding: 32px 14px 30px !important; }
+    .banner-eyebrow    { font-size: 9px !important; letter-spacing: 0.18em !important; }
+    .banner-title      { font-size: 2rem !important; }
+    .banner-sub        { font-size: 14px !important; }
+
+    .admin-body        { padding: 20px 10px 48px !important; }
+
+    .stat-value        { font-size: 24px !important; }
+
+    /* Stack action buttons vertically if very tight */
+    .row-actions-wrap  { flex-direction: column !important; gap: 6px !important; }
+    .row-action-btn    { padding: 7px 12px !important; }
+
+    .admin-form-inner  { padding: 16px 14px !important; }
+  }
 `;
 
 const Admin = () => {
-
-  const [stats, setStats] = useState({ users: 0, products: 0, orders: 0 });
-  const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({ name: "", price: "", image: null, description: "", category: "" });
+  const [stats, setStats]             = useState({ users: 0, products: 0, orders: 0 });
+  const [products, setProducts]       = useState([]);
+  const [form, setForm]               = useState({ name: "", price: "", image: null, description: "", category: "" });
   const [imagePreview, setImagePreview] = useState(null);
-  const [editingId, setEditingId] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId]     = useState(null);
+  const [loading, setLoading]         = useState(false);
   const [notification, setNotification] = useState(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("https://vaami-s-creation.onrender.com/api/products");
+      const res  = await fetch("https://vaami-s-creation.onrender.com/api/products");
       const data = await res.json();
       setProducts(data);
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-    }
+    } catch (err) { console.error("Failed to fetch products:", err); }
   };
 
   const fetchStats = async () => {
     try {
       setStatsLoading(true);
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user  = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
-      const res = await fetch("https://vaami-s-creation.onrender.com/api/admin/stats", {
+      const res   = await fetch("https://vaami-s-creation.onrender.com/api/admin/stats", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       setStats(data);
-    } catch (err) {
-      console.error("Failed to fetch stats:", err);
-    } finally {
-      setStatsLoading(false);
-    }
+    } catch (err) { console.error("Failed to fetch stats:", err); }
+    finally { setStatsLoading(false); }
   };
 
   useEffect(() => { fetchProducts(); fetchStats(); }, []);
@@ -86,106 +156,77 @@ const Admin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!form.name || !form.price || !form.category || !form.description) {
+    if (!form.name || !form.price || !form.category || !form.description)
       return showNotification("All fields are required", "error");
-    }
 
     setLoading(true);
-
     try {
-
-      const user = JSON.parse(localStorage.getItem("user"));
-      const token = user?.token;
-
+      const user     = JSON.parse(localStorage.getItem("user"));
+      const token    = user?.token;
       const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("price", form.price);
+      formData.append("name",        form.name);
+      formData.append("price",       form.price);
       formData.append("description", form.description);
-      formData.append("category", form.category);
-
-      if (form.image) {
-        formData.append("image", form.image);
-      }
+      formData.append("category",    form.category);
+      if (form.image) formData.append("image", form.image);
 
       const url = editingId
         ? `https://vaami-s-creation.onrender.com/api/products/${editingId}`
         : "https://vaami-s-creation.onrender.com/api/products";
 
-      const res = await fetch(url, {
-        method: editingId ? "PUT" : "POST",
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: formData
+      const res  = await fetch(url, {
+        method:  editingId ? "PUT" : "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body:    formData,
       });
-
       const saved = await res.json();
-
-      if (!res.ok) {
-        showNotification(saved.message || "Error saving product", "error");
-        return;
-      }
+      if (!res.ok) { showNotification(saved.message || "Error saving product", "error"); return; }
 
       setProducts(editingId
         ? products.map((p) => (p._id === editingId ? saved : p))
         : [saved, ...products]
       );
-
       showNotification(editingId ? "Product updated successfully" : "Product added successfully");
-
       resetForm();
       fetchStats();
-
     } catch (error) {
       console.error(error);
       showNotification("Something went wrong", "error");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Permanently delete this product?")) return;
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user  = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
       await fetch(`https://vaami-s-creation.onrender.com/api/products/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        method: "DELETE", headers: { Authorization: `Bearer ${token}` },
       });
       setProducts(products.filter((p) => p._id !== id));
       showNotification("Product deleted");
       fetchStats();
-    } catch (err) {
-      showNotification("Delete failed", "error");
-    }
+    } catch { showNotification("Delete failed", "error"); }
   };
 
   const handleEdit = (p) => {
-    setForm({
-      name: p.name || "",
-      price: p.price || "",
-      image: null,
-      description: p.description || "",
-      category: p.category || "",
-    });
+    setForm({ name: p.name || "", price: p.price || "", image: null, description: p.description || "", category: p.category || "" });
     setImagePreview(`https://vaami-s-creation.onrender.com${p.image}`);
     setEditingId(p._id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const fields = [
-    { label: "PRODUCT NAME", name: "name", type: "text", placeholder: "e.g. Golden Heart Earring" },
-    { label: "PRICE (₹)", name: "price", type: "number", placeholder: "e.g. 1500" },
-    { label: "CATEGORY", name: "category", type: "text", placeholder: "e.g. Earrings" },
-    { label: "DESCRIPTION", name: "description", type: "textarea", placeholder: "Describe the product..." },
+    { label: "PRODUCT NAME", name: "name",        type: "text",     placeholder: "e.g. Golden Heart Earring" },
+    { label: "PRICE (₹)",    name: "price",       type: "number",   placeholder: "e.g. 1500" },
+    { label: "CATEGORY",     name: "category",    type: "text",     placeholder: "e.g. Earrings" },
+    { label: "DESCRIPTION",  name: "description", type: "textarea", placeholder: "Describe the product..." },
   ];
 
   const statItems = [
-    { label: "TOTAL USERS", value: stats.users, icon: "◎", path: "/admin/users", accent: "#0f0018" },
-    { label: "TOTAL PRODUCTS", value: stats.products, icon: "◈", path: null, accent: "#1a3a6b" },
-    { label: "TOTAL ORDERS", value: stats.orders, icon: "◇", path: "/admin/orders", accent: "#0f4a3a" },
+    { label: "TOTAL USERS",     value: stats.users,    icon: "◎", path: "/admin/users",  accent: "#0f0018" },
+    { label: "TOTAL PRODUCTS",  value: stats.products, icon: "◈", path: null,            accent: "#1a3a6b" },
+    { label: "TOTAL ORDERS",    value: stats.orders,   icon: "◇", path: "/admin/orders", accent: "#0f4a3a" },
   ];
 
   return (
@@ -195,38 +236,41 @@ const Admin = () => {
 
         {/* ── Toast ── */}
         {notification && (
-          <div style={{
-            ...s.toast,
-            ...(notification.type === "error" ? s.toastError : s.toastSuccess),
-          }}>
+          <div
+            className="admin-toast"
+            style={{
+              ...s.toast,
+              ...(notification.type === "error" ? s.toastError : s.toastSuccess),
+            }}
+          >
             {notification.type === "success" ? "✦  " : "✕  "}
             {notification.message}
           </div>
         )}
 
         {/* ── Banner ── */}
-        <div style={s.banner}>
+        <div style={s.banner} className="admin-banner">
           <div style={s.bannerInner}>
-            <p style={s.bannerEyebrow}>VAAMI'S CREATIONS</p>
-            <h1 style={s.bannerTitle}>Admin Dashboard</h1>
+            <p style={s.bannerEyebrow} className="banner-eyebrow">VAAMI'S CREATIONS</p>
+            <h1 style={s.bannerTitle} className="banner-title">Admin Dashboard</h1>
             <div style={s.divider}>
               <div style={s.dividerLine} />
               <span style={s.dividerGem}>◆</span>
               <div style={s.dividerLine} />
             </div>
-            <p style={s.bannerSub}>Manage products, orders and users</p>
+            <p style={s.bannerSub} className="banner-sub">Manage products, orders and users</p>
           </div>
         </div>
 
         {/* ── Body ── */}
-        <div style={s.body}>
+        <div style={s.body} className="admin-body">
 
           {/* ── Stat Cards ── */}
-          <div style={s.statsRow}>
+          <div style={s.statsRow} className="admin-stats-row">
             {statItems.map((st) => (
               <div
                 key={st.label}
-                className="stat-card"
+                className="stat-card stat-card-inner"
                 onClick={() => st.path && navigate(st.path)}
                 style={{
                   ...s.statCard,
@@ -234,33 +278,31 @@ const Admin = () => {
                   borderTop: `4px solid ${st.accent}`,
                 }}
               >
-                <span style={{ ...s.statIcon, color: st.accent }}>{st.icon}</span>
-                <p style={s.statValue}>
-                  {statsLoading ? "—" : st.value}
-                </p>
-                <p style={s.statLabel}>{st.label}</p>
-                {st.path && (
-                  <p style={{ ...s.statLink, color: st.accent }}>View all →</p>
-                )}
+                <span style={{ ...s.statIcon, color: st.accent }} className="stat-icon">{st.icon}</span>
+                <div className="stat-text">
+                  <p style={s.statValue} className="stat-value">
+                    {statsLoading ? "—" : st.value}
+                  </p>
+                  <p style={s.statLabel} className="stat-label">{st.label}</p>
+                  {st.path && (
+                    <p style={{ ...s.statLink, color: st.accent }}>View all →</p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
 
           {/* ── Two-column layout ── */}
-          <div style={s.mainLayout}>
+          <div style={s.mainLayout} className="admin-main-layout">
 
             {/* ── LEFT: Form ── */}
-            <div style={s.formWrap}>
-              <div style={s.formHeader}>
-                <p style={s.formEyebrow}>
-                  {editingId ? "EDITING PRODUCT" : "NEW PRODUCT"}
-                </p>
-                <h2 style={s.formTitle}>
-                  {editingId ? "Update Details" : "Add a Piece"}
-                </h2>
+            <div style={s.formWrap} className="admin-form-wrap">
+              <div style={s.formHeader} className="form-header-inner">
+                <p style={s.formEyebrow}>{editingId ? "EDITING PRODUCT" : "NEW PRODUCT"}</p>
+                <h2 style={s.formTitle}>{editingId ? "Update Details" : "Add a Piece"}</h2>
               </div>
 
-              <form onSubmit={handleSubmit} style={s.form}>
+              <form onSubmit={handleSubmit} style={s.form} className="admin-form-inner">
                 {fields.map((field) => (
                   <div key={field.name} style={s.fieldGroup}>
                     <label style={s.fieldLabel}>{field.label}</label>
@@ -289,15 +331,9 @@ const Admin = () => {
                 <div style={s.fieldGroup}>
                   <label style={s.fieldLabel}>PRODUCT IMAGE</label>
                   <label style={s.fileLabel}>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      style={{ display: "none" }}
-                    />
+                    <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: "none" }} />
                     <span style={s.fileText}>
-                      ◈ &nbsp;
-                      {form.image ? form.image.name : "Choose image file"}
+                      ◈ &nbsp;{form.image ? form.image.name : "Choose image file"}
                     </span>
                   </label>
                 </div>
@@ -310,12 +346,7 @@ const Admin = () => {
                   </div>
                 )}
 
-                <button
-                  className="admin-submit"
-                  type="submit"
-                  style={s.submitBtn}
-                  disabled={loading}
-                >
+                <button className="admin-submit" type="submit" style={s.submitBtn} disabled={loading}>
                   {loading ? "Saving..." : editingId ? "UPDATE PRODUCT" : "ADD PRODUCT"}
                 </button>
 
@@ -329,12 +360,10 @@ const Admin = () => {
 
             {/* ── RIGHT: Product List ── */}
             <div style={s.productsPanel}>
-              <div style={s.panelHeader}>
+              <div style={s.panelHeader} className="panel-header-inner">
                 <p style={s.panelEyebrow}>INVENTORY</p>
                 <h2 style={s.panelTitle}>All Products</h2>
-                <p style={s.panelCount}>
-                  {products.length} piece{products.length !== 1 ? "s" : ""}
-                </p>
+                <p style={s.panelCount}>{products.length} piece{products.length !== 1 ? "s" : ""}</p>
               </div>
 
               {products.length === 0 ? (
@@ -348,40 +377,37 @@ const Admin = () => {
                   {products.map((p, i) => (
                     <div
                       key={p._id}
-                      className="admin-card product-row"
+                      className="admin-card product-row product-row-inner"
                       style={{
                         ...s.productRow,
-                        borderBottom: i === products.length - 1
-                          ? "none"
-                          : "1px solid #e8e2d9",
+                        borderBottom: i === products.length - 1 ? "none" : "1px solid #e8e2d9",
                       }}
                     >
                       <img
                         src={`https://vaami-s-creation.onrender.com${p.image}`}
                         alt={p.name}
                         style={s.thumb}
+                        className="product-thumb"
                       />
 
                       <div style={s.productInfo}>
-                        <p style={s.productCat}>
-                          {p.category?.toUpperCase() || "JEWELLERY"}
-                        </p>
-                        <p style={s.productName}>{p.name}</p>
-                        <p style={s.productPrice}>
+                        <p style={s.productCat}>{p.category?.toUpperCase() || "JEWELLERY"}</p>
+                        <p style={s.productName} className="product-name">{p.name}</p>
+                        <p style={s.productPrice} className="product-price">
                           ₹{p.price ? Number(p.price).toLocaleString() : "0"}
                         </p>
                       </div>
 
-                      <div style={s.rowActions}>
+                      <div style={s.rowActions} className="row-actions-wrap">
                         <button
-                          className="admin-edit-btn"
+                          className="admin-edit-btn row-action-btn"
                           style={s.editBtn}
                           onClick={() => handleEdit(p)}
                         >
                           Edit
                         </button>
                         <button
-                          className="admin-delete-btn"
+                          className="admin-delete-btn row-action-btn"
                           style={s.deleteBtn}
                           onClick={() => handleDelete(p._id)}
                         >
@@ -403,11 +429,10 @@ const Admin = () => {
 
 export default Admin;
 
-/* ══════════════════════════════════════
-   STYLES — maximum font & darkest text
-══════════════════════════════════════ */
+/* ─────────────────────────────────────────
+   Base styles (desktop-first)
+───────────────────────────────────────── */
 const s = {
-
   page: {
     width: "100%",
     background: "#faf8f5",
@@ -458,7 +483,7 @@ const s = {
   },
   bannerTitle: {
     fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: "clamp(2.8rem, 6vw, 4.4rem)",
+    fontSize: "clamp(2rem, 6vw, 4.4rem)",
     fontWeight: 400,
     fontStyle: "italic",
     color: "#ffd6ff",
@@ -466,21 +491,15 @@ const s = {
     lineHeight: 1.1,
   },
   divider: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    maxWidth: "180px",
-    margin: "0 auto 16px",
+    display: "flex", alignItems: "center", gap: "12px",
+    maxWidth: "180px", margin: "0 auto 16px",
   },
   dividerLine: { flex: 1, height: "1px", background: "rgba(255,214,255,0.3)" },
-  dividerGem: { fontSize: "10px", color: "rgba(255,214,255,0.6)" },
+  dividerGem:  { fontSize: "10px", color: "rgba(255,214,255,0.6)" },
   bannerSub: {
     fontFamily: "'Cormorant Garamond', serif",
-    fontSize: "20px",
-    fontStyle: "italic",
-    color: "rgba(255,214,255,0.7)",
-    margin: 0,
-    fontWeight: 400,
+    fontSize: "20px", fontStyle: "italic",
+    color: "rgba(255,214,255,0.7)", margin: 0, fontWeight: 400,
   },
 
   /* Body */
@@ -512,26 +531,18 @@ const s = {
   },
   statValue: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "44px",
-    fontWeight: 600,
-    color: "#0f0018",
-    margin: "0 0 8px",
-    lineHeight: 1,
+    fontSize: "44px", fontWeight: 600,
+    color: "#0f0018", margin: "0 0 8px", lineHeight: 1,
   },
   statLabel: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.28em",
-    color: "#1a1020",
-    margin: "0 0 10px",
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.28em",
+    color: "#1a1020", margin: "0 0 10px", fontWeight: 600,
   },
   statLink: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.15em",
-    margin: 0,
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.15em",
+    margin: 0, fontWeight: 600,
   },
 
   /* Main layout */
@@ -542,7 +553,7 @@ const s = {
     alignItems: "start",
   },
 
-  /* Form wrap */
+  /* Form */
   formWrap: {
     background: "#fff",
     border: "1px solid #ddd8d2",
@@ -557,109 +568,66 @@ const s = {
   },
   formEyebrow: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.28em",
-    color: "rgba(255,214,255,0.65)",
-    marginBottom: "7px",
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.28em",
+    color: "rgba(255,214,255,0.65)", marginBottom: "7px", fontWeight: 600,
   },
   formTitle: {
     fontFamily: "'Cormorant Garamond', serif",
-    fontSize: "30px",
-    fontWeight: 400,
-    fontStyle: "italic",
-    color: "#ffd6ff",
-    margin: 0,
+    fontSize: "30px", fontWeight: 400, fontStyle: "italic",
+    color: "#ffd6ff", margin: 0,
   },
-  form: { padding: "32px" },
-  fieldGroup: { marginBottom: "22px" },
+  form:        { padding: "32px" },
+  fieldGroup:  { marginBottom: "22px" },
   fieldLabel: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "12px",
-    letterSpacing: "0.2em",
-    color: "#0f0018",
-    display: "block",
-    marginBottom: "9px",
-    fontWeight: 600,
+    fontSize: "12px", letterSpacing: "0.2em",
+    color: "#0f0018", display: "block", marginBottom: "9px", fontWeight: 600,
   },
   input: {
-    width: "100%",
-    padding: "14px 16px",
-    border: "1.5px solid #c8c0bc",
-    borderRadius: "0",
-    fontSize: "17px",
-    fontFamily: "'Cormorant Garamond', serif",
-    color: "#0f0018",
-    background: "#faf8f5",
-    boxSizing: "border-box",
-    transition: "border-color 0.2s",
-    fontWeight: 400,
+    width: "100%", padding: "14px 16px",
+    border: "1.5px solid #c8c0bc", borderRadius: "0",
+    fontSize: "17px", fontFamily: "'Cormorant Garamond', serif",
+    color: "#0f0018", background: "#faf8f5",
+    boxSizing: "border-box", transition: "border-color 0.2s", fontWeight: 400,
   },
   fileLabel: {
-    display: "block",
-    padding: "14px 16px",
-    border: "1.5px dashed #9c8fa0",
-    cursor: "pointer",
-    background: "#faf8f5",
-    transition: "border-color 0.2s",
+    display: "block", padding: "14px 16px",
+    border: "1.5px dashed #9c8fa0", cursor: "pointer",
+    background: "#faf8f5", transition: "border-color 0.2s",
   },
   fileText: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.16em",
-    color: "#1a1020",
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.16em",
+    color: "#1a1020", fontWeight: 600,
   },
   previewWrap: {
-    display: "flex",
-    alignItems: "center",
-    gap: "16px",
-    padding: "16px",
-    background: "#faf8f5",
-    border: "1px solid #ddd8d2",
-    marginBottom: "22px",
+    display: "flex", alignItems: "center", gap: "16px",
+    padding: "16px", background: "#faf8f5",
+    border: "1px solid #ddd8d2", marginBottom: "22px",
   },
   previewImg: {
-    width: "80px",
-    height: "80px",
-    objectFit: "cover",
-    borderRadius: "2px",
-    border: "1px solid #ddd8d2",
+    width: "80px", height: "80px", objectFit: "cover",
+    borderRadius: "2px", border: "1px solid #ddd8d2",
   },
   previewCaption: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.2em",
-    color: "#1a1020",
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.2em",
+    color: "#1a1020", fontWeight: 600,
   },
   submitBtn: {
-    width: "100%",
-    padding: "16px",
-    background: "#2e1065",
-    color: "#ffd6ff",
-    border: "none",
-    fontFamily: "'Cinzel', serif",
-    fontSize: "13px",
-    letterSpacing: "0.2em",
-    cursor: "pointer",
-    transition: "background 0.3s ease, letter-spacing 0.3s ease",
-    marginBottom: "12px",
-    borderRadius: "0",
-    fontWeight: 600,
+    width: "100%", padding: "16px",
+    background: "#2e1065", color: "#ffd6ff",
+    border: "none", fontFamily: "'Cinzel', serif",
+    fontSize: "13px", letterSpacing: "0.2em",
+    cursor: "pointer", transition: "background 0.3s ease, letter-spacing 0.3s ease",
+    marginBottom: "12px", borderRadius: "0", fontWeight: 600,
   },
   cancelBtn: {
-    width: "100%",
-    padding: "14px",
-    background: "transparent",
-    color: "#0f0018",
-    border: "1.5px solid #c8c0bc",
-    fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.2em",
-    cursor: "pointer",
-    borderRadius: "0",
-    fontWeight: 600,
+    width: "100%", padding: "14px",
+    background: "transparent", color: "#0f0018",
+    border: "1.5px solid #c8c0bc", fontFamily: "'Cinzel', serif",
+    fontSize: "11px", letterSpacing: "0.2em",
+    cursor: "pointer", borderRadius: "0", fontWeight: 600,
   },
 
   /* Products panel */
@@ -674,121 +642,76 @@ const s = {
   },
   panelEyebrow: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.28em",
-    color: "rgba(255,214,255,0.65)",
-    marginBottom: "6px",
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.28em",
+    color: "rgba(255,214,255,0.65)", marginBottom: "6px", fontWeight: 600,
   },
   panelTitle: {
     fontFamily: "'Cormorant Garamond', serif",
-    fontSize: "30px",
-    fontWeight: 400,
-    fontStyle: "italic",
-    color: "#ffd6ff",
-    margin: "0 0 6px",
+    fontSize: "30px", fontWeight: 400, fontStyle: "italic",
+    color: "#ffd6ff", margin: "0 0 6px",
   },
   panelCount: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.2em",
-    color: "rgba(255,214,255,0.55)",
-    margin: 0,
-    fontWeight: 600,
+    fontSize: "11px", letterSpacing: "0.2em",
+    color: "rgba(255,214,255,0.55)", margin: 0, fontWeight: 600,
   },
   productList: { display: "flex", flexDirection: "column" },
   productRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    padding: "20px 28px",
-    transition: "background 0.2s",
-    background: "#fff",
+    display: "flex", alignItems: "center",
+    gap: "20px", padding: "20px 28px",
+    transition: "background 0.2s", background: "#fff",
   },
   thumb: {
-    width: "72px",
-    height: "72px",
-    objectFit: "cover",
-    flexShrink: 0,
-    border: "1px solid #ddd8d2",
-    borderRadius: "2px",
+    width: "72px", height: "72px",
+    objectFit: "cover", flexShrink: 0,
+    border: "1px solid #ddd8d2", borderRadius: "2px",
   },
   productInfo: { flex: 1, minWidth: 0 },
   productCat: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "10px",
-    letterSpacing: "0.24em",
-    color: "#1a1020",
-    marginBottom: "5px",
-    fontWeight: 600,
+    fontSize: "10px", letterSpacing: "0.24em",
+    color: "#1a1020", marginBottom: "5px", fontWeight: 600,
   },
   productName: {
-    fontSize: "19px",
-    fontWeight: 600,
-    color: "#0f0018",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    marginBottom: "5px",
-    fontFamily: "'Cormorant Garamond', serif",
+    fontSize: "19px", fontWeight: 600, color: "#0f0018",
+    whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+    marginBottom: "5px", fontFamily: "'Cormorant Garamond', serif",
   },
   productPrice: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "15px",
-    color: "#0f0018",
-    fontWeight: 600,
+    fontSize: "15px", color: "#0f0018", fontWeight: 600,
   },
-  rowActions: { display: "flex", gap: "10px", flexShrink: 0 },
+  rowActions:  { display: "flex", gap: "10px", flexShrink: 0 },
   editBtn: {
-    padding: "10px 22px",
-    background: "transparent",
-    border: "1.5px solid #534AB7",
-    color: "#1a1060",
-    fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.14em",
-    cursor: "pointer",
+    padding: "10px 22px", background: "transparent",
+    border: "1.5px solid #534AB7", color: "#1a1060",
+    fontFamily: "'Cinzel', serif", fontSize: "11px",
+    letterSpacing: "0.14em", cursor: "pointer",
     transition: "background 0.2s, color 0.2s",
-    borderRadius: "0",
-    fontWeight: 600,
+    borderRadius: "0", fontWeight: 600,
   },
   deleteBtn: {
-    padding: "10px 22px",
-    background: "transparent",
-    border: "1.5px solid #dc2626",
-    color: "#7f1d1d",
-    fontFamily: "'Cinzel', serif",
-    fontSize: "11px",
-    letterSpacing: "0.14em",
-    cursor: "pointer",
+    padding: "10px 22px", background: "transparent",
+    border: "1.5px solid #dc2626", color: "#7f1d1d",
+    fontFamily: "'Cinzel', serif", fontSize: "11px",
+    letterSpacing: "0.14em", cursor: "pointer",
     transition: "background 0.2s, color 0.2s",
-    borderRadius: "0",
-    fontWeight: 600,
+    borderRadius: "0", fontWeight: 600,
   },
 
   /* Empty state */
-  emptyState: {
-    textAlign: "center",
-    padding: "72px 20px",
-  },
+  emptyState: { textAlign: "center", padding: "72px 20px" },
   emptyIcon: {
-    fontSize: "36px",
-    color: "#1a1020",
-    marginBottom: "18px",
-    fontFamily: "serif",
+    fontSize: "36px", color: "#1a1020",
+    marginBottom: "18px", fontFamily: "serif",
   },
   emptyTitle: {
     fontFamily: "'Cinzel', serif",
-    fontSize: "16px",
-    letterSpacing: "0.2em",
-    color: "#0f0018",
-    marginBottom: "10px",
-    fontWeight: 600,
+    fontSize: "16px", letterSpacing: "0.2em",
+    color: "#0f0018", marginBottom: "10px", fontWeight: 600,
   },
   emptySubtitle: {
-    fontSize: "18px",
-    fontStyle: "italic",
-    color: "#1a1020",
-    fontWeight: 400,
+    fontSize: "18px", fontStyle: "italic",
+    color: "#1a1020", fontWeight: 400,
   },
 };
