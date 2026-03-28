@@ -25,9 +25,10 @@ const __dirname = path.dirname(__filename);
 
 app.use(
   cors({
-    origin: [
-      "https://vaami-s-creation-8nxy6nhpk-poojabhagwat498s-projects.vercel.app",
-    ],
+   origin: [
+  "http://localhost:5173",
+  "https://vaami-s-creation-8nxy6nhpk-poojabhagwat498s-projects.vercel.app",
+],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
