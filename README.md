@@ -7,7 +7,8 @@ The platform allows users to browse jewelry products, add items to wishlist or c
 
 ## 🚀 Live Project
 
-🔗 Live Demo:https://vaami-s-creation.vercel.app
+🔗 Live Demo:https://vaami-s-creation.vercel.app 
+
 🔗 GitHub Repository: https://github.com/Poojabhagwat498/Vaami-s-Creation.git
 
 ---
