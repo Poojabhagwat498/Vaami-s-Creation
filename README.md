@@ -1,7 +1,6 @@
 # 💎 Vaami's Creations – MERN Stack Jewelry E-Commerce Website
 
-A full-stack **Jewelry E-Commerce Web Application** built using the **MERN Stack (MongoDB, Express.js, React.js, Node.js)**.  
-The platform allows users to browse jewelry products, add items to wishlist or cart, and manage their shopping experience through a modern and responsive interface.
+A full-stack **Jewelry E-Commerce Web Application** built using the **MERN Stack (MongoDB, Express.js, React.js, Node.js)**.The platform allows users to browse jewelry products, add items to wishlist or cart, and manage their shopping experience through a modern and responsive interface.
 
 ---
 
