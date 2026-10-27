@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const AdminOrders = () => {
 
@@ -11,7 +12,7 @@ const AdminOrders = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
 
-      const res = await fetch("https://vaami-s-creation.onrender.com/api/orders", {
+      const res = await fetch("/api/orders", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -33,6 +34,12 @@ const AdminOrders = () => {
 
   return (
     <div style={s.page}>
+
+      <div style={{ marginBottom: "16px" }}>
+        <Link to="/admin" style={{ color: "#7c3aed", textDecoration: "none", fontSize: "14px", fontWeight: "600" }}>
+          ← Back to Admin Dashboard
+        </Link>
+      </div>
 
       <div style={s.header}>
         <h1 style={s.title}>Total Orders</h1>
@@ -63,7 +70,7 @@ const AdminOrders = () => {
                 <tr key={order._id} style={s.tr}>
 
                   <td style={s.td}>
-                    {order._id.slice(-6)}
+                    {String(order._id || "").slice(-6)}
                   </td>
 
                   <td style={s.td}>

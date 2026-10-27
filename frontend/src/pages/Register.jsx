@@ -42,7 +42,7 @@ function Register() {
 
     try {
       setLoading(true);
-      await axios.post("https://vaami-s-creation.onrender.com/api/auth/register", {
+      await axios.post("/api/auth/register", {
         name: username,
         email,
         password,

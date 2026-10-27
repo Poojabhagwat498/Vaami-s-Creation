@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useBag } from "../context/BagContext";
 import { useWishlist } from "../context/WishListContext.jsx";
+import { getImageUrl } from "../config/api";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -210,7 +211,7 @@ const ProductCard = ({ product }) => {
           onClick={() => navigate(`/product/${product._id}`)}
         >
           <img
-            src={`https://vaami-s-creation.onrender.com${product.image}`}
+            src={getImageUrl(product.image)}
             alt={product.name}
           />
 

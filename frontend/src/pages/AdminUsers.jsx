@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -8,7 +9,7 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("https://vaami-s-creation.onrender.com/api/admin/users", {
+      const res = await fetch("/api/admin/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -59,6 +60,12 @@ const AdminUsers = () => {
 
       {/* ── PAGE BODY ── */}
       <div className="au-page">
+
+        <div style={{ marginBottom: "20px" }}>
+          <Link to="/admin" style={{ color: "#7c3aed", textDecoration: "none", fontSize: "14px", fontWeight: "600" }}>
+            ← Back to Admin Dashboard
+          </Link>
+        </div>
 
         {/* ── TOP BAR ── */}
         <div className="au-topbar">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "../config/api";
 
 const fonts = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap');
@@ -112,7 +113,7 @@ const Admin = () => {
 
   const fetchProducts = async () => {
     try {
-      const res  = await fetch("https://vaami-s-creation.onrender.com/api/products");
+      const res  = await fetch("/api/products");
       const data = await res.json();
       setProducts(data);
     } catch (err) { console.error("Failed to fetch products:", err); }
@@ -123,7 +124,7 @@ const Admin = () => {
       setStatsLoading(true);
       const user  = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
-      const res   = await fetch("https://vaami-s-creation.onrender.com/api/admin/stats", {
+      const res   = await fetch("/api/admin/stats", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -171,8 +172,8 @@ const Admin = () => {
       if (form.image) formData.append("image", form.image);
 
       const url = editingId
-        ? `https://vaami-s-creation.onrender.com/api/products/${editingId}`
-        : "https://vaami-s-creation.onrender.com/api/products";
+        ? `/api/products/${editingId}`
+        : "/api/products";
 
       const res  = await fetch(url, {
         method:  editingId ? "PUT" : "POST",
@@ -200,7 +201,7 @@ const Admin = () => {
     try {
       const user  = JSON.parse(localStorage.getItem("user"));
       const token = user?.token;
-      await fetch(`https://vaami-s-creation.onrender.com/api/products/${id}`, {
+      await fetch(`/api/products/${id}`, {
         method: "DELETE", headers: { Authorization: `Bearer ${token}` },
       });
       setProducts(products.filter((p) => p._id !== id));
@@ -211,7 +212,7 @@ const Admin = () => {
 
   const handleEdit = (p) => {
     setForm({ name: p.name || "", price: p.price || "", image: null, description: p.description || "", category: p.category || "" });
-    setImagePreview(`https://vaami-s-creation.onrender.com${p.image}`);
+    setImagePreview(getImageUrl(p.image));
     setEditingId(p._id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -384,7 +385,7 @@ const Admin = () => {
                       }}
                     >
                       <img
-                        src={`https://vaami-s-creation.onrender.com${p.image}`}
+                        src={getImageUrl(p.image)}
                         alt={p.name}
                         style={s.thumb}
                         className="product-thumb"

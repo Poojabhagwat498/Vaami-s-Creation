@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBag } from "../context/BagContext";
+import { getImageUrl } from "../config/api";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,17 +13,19 @@ const ProductDetails = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
-    fetch(`https://vaami-s-creation.onrender.com/api/products/${id}`)
+    fetch(`/api/products/${id}`)
       .then((res) => res.json())
       .then(setProduct)
       .catch(console.error);
   }, [id]);
 
-  const isAdded = product ? bagItems.some((item) => item.id === product.id) : false;
+  const isAdded = product
+    ? bagItems.some((item) => (item._id || item.id) === (product._id || product.id))
+    : false;
 
   const handleBagToggle = () => {
     if (isAdded) {
-      removeFromBag(product.id);
+      removeFromBag(product._id || product.id);
     } else {
       addToBag(product);
       setAdded(true);
@@ -69,7 +72,7 @@ const ProductDetails = () => {
             <div className="pd-image-frame">
               <div className={`pd-image-inner ${imgLoaded ? "loaded" : ""}`}>
                 <img
-                  src={`https://vaami-s-creation.onrender.com${product.image}`}
+                  src={getImageUrl(product.image)}
                   alt={product.name}
                   className="pd-img"
                   onLoad={() => setImgLoaded(true)}

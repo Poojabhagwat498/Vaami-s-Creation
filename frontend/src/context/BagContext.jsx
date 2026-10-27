@@ -34,12 +34,18 @@ export const BagProvider = ({ children }) => {
   };
 
   const removeFromBag = (id) => {
-    setBagItems((prev) => prev.filter((item) => item._id !== id));
+    if (!id) {
+      setBagItems([]);
+      return;
+    }
+    setBagItems((prev) => prev.filter((item) => (item._id || item.id) !== id));
   };
+
+  const clearBag = () => setBagItems([]);
 
   return (
     <BagContext.Provider
-      value={{ bagItems, addToBag, decreaseQty, removeFromBag }}
+      value={{ bagItems, addToBag, decreaseQty, removeFromBag, clearBag }}
     >
       {children}
     </BagContext.Provider>

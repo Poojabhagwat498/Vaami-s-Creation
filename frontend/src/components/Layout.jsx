@@ -143,23 +143,38 @@ const Layout = () => {
             </span>
 
             <div style={s.topBarRight} className="top-bar-right">
-              {!user && (
-                <Link
-                  to="/login"
-                  style={s.topBarLink}
-                  className="top-bar-link top-bar-link-el"
-                >
-                  Login
-                </Link>
-              )}
-
-              {user?.role === "admin" && (
+              {!user ? (
+                <>
+                  <Link
+                    to="/login"
+                    style={s.topBarLink}
+                    className="top-bar-link top-bar-link-el"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/login?mode=admin"
+                    style={{ ...s.topBarLink, color: "#ffd6ff", marginLeft: "14px" }}
+                    className="top-bar-link top-bar-link-el"
+                  >
+                    🛡️ Admin
+                  </Link>
+                </>
+              ) : user?.role?.toLowerCase() === "admin" ? (
                 <Link
                   to="/admin"
-                  style={s.topBarLink}
+                  style={{ ...s.topBarLink, color: "#ffd6ff", fontWeight: "700" }}
                   className="top-bar-link top-bar-link-el"
                 >
-                  Admin Panel
+                  🛡️ Admin Panel
+                </Link>
+              ) : (
+                <Link
+                  to="/login?mode=admin"
+                  style={{ ...s.topBarLink, opacity: 0.8 }}
+                  className="top-bar-link top-bar-link-el"
+                >
+                  Admin Portal
                 </Link>
               )}
             </div>

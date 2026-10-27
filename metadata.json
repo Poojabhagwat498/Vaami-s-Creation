@@ -1,0 +1,8 @@
+{
+  "name": "Vaami's Creation",
+  "description": "Handcrafted luxury jewelry collection offering necklaces, earrings, rings, bracelets, and watches.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

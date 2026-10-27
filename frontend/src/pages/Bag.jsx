@@ -1,5 +1,6 @@
 import { useBag } from "../context/BagContext";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "../config/api";
 
 const fonts = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap');
@@ -153,7 +154,7 @@ const Bag = () => {
 
                     <div style={s.imgWrap} className="bag-img-wrap">
                       <img
-                        src={`https://vaami-s-creation.onrender.com${item.image}`}
+                        src={getImageUrl(item.image)}
                         alt={item.name}
                         style={s.img}
                       />

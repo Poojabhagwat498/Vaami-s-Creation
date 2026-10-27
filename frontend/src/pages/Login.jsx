@@ -5,8 +5,7 @@ import axios from "axios";
 
 // ✅ Axios instance
 const API = axios.create({
-  baseURL:
-    import.meta.env.VITE_URL,
+  baseURL: import.meta.env.VITE_URL || "/api",
   withCredentials: true,
 });
 
@@ -14,29 +13,38 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loginMode, setLoginMode] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("mode") === "admin" ? "admin" : "customer";
+  });
+  const [formData, setFormData] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("mode") === "admin"
+      ? { email: "admin@gmail.com", password: "admin111" }
+      : { email: "", password: "" };
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState("");
 
-
+  const handleSelectMode = (mode) => {
+    setLoginMode(mode);
+    setMessage("");
+    setIsError(false);
+    if (mode === "admin") {
+      setFormData({ email: "admin@gmail.com", password: "admin111" });
+    } else {
+      setFormData({ email: "", password: "" });
+    }
+  };
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const executeLogin = async (email, password) => {
     setMessage("");
-    const { email, password } = formData;
-
-    if (!email || !password) {
-      setIsError(true);
-      setMessage("Email and password are required.");
-      return;
-    }
-
     try {
       setLoading(true);
       const res = await API.post("/auth/login", { email, password });
@@ -47,18 +55,51 @@ function Login() {
       login({ token: data.token, user: data.user });
 
       setIsError(false);
-      setMessage("Login successful!");
+      setMessage(`Welcome back, ${data.user.name}!`);
 
       setTimeout(() => {
         if (data.user.role?.toLowerCase() === "admin") navigate("/admin");
         else navigate("/home");
-      }, 700);
+      }, 600);
     } catch (err) {
       setIsError(true);
       setMessage(err.response?.data?.message || "Server error. Try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      setIsError(true);
+      setMessage("Email and password are required.");
+      return;
+    }
+
+    await executeLogin(email, password);
+  };
+
+  const handleDemoLogin = (email, password) => {
+    setFormData({ email, password });
+    executeLogin(email, password);
+  };
+
+  const handleSkipLogin = () => {
+    const guestUser = {
+      id: "guest_" + Date.now(),
+      _id: "guest_" + Date.now(),
+      name: "Guest Visitor",
+      email: "guest@vaami.com",
+      role: "user",
+    };
+    const guestToken = "guest_token_" + Date.now();
+    localStorage.setItem("token", guestToken);
+    localStorage.setItem("user", JSON.stringify(guestUser));
+    login({ token: guestToken, user: guestUser });
+    navigate("/home");
   };
 
   return (
@@ -85,8 +126,74 @@ function Login() {
             <span className="lg-brand-name">Vaami's Creation</span>
           </div>
 
-          <h1 className="lg-title">Welcome Back</h1>
-          <p className="lg-subtitle">Sign in to continue your journey</p>
+          {/* Mode Switcher Tabs */}
+          <div className="lg-mode-tabs">
+            <button
+              type="button"
+              className={`lg-mode-tab ${loginMode === "customer" ? "active" : ""}`}
+              onClick={() => handleSelectMode("customer")}
+            >
+              <span>👤 Customer Login</span>
+            </button>
+            <button
+              type="button"
+              className={`lg-mode-tab ${loginMode === "admin" ? "active" : ""}`}
+              onClick={() => handleSelectMode("admin")}
+            >
+              <span>🛡️ Admin Portal</span>
+            </button>
+          </div>
+
+          <h1 className="lg-title">
+            {loginMode === "admin" ? "Admin Access" : "Welcome Back"}
+          </h1>
+          <p className="lg-subtitle">
+            {loginMode === "admin"
+              ? "Sign in to manage catalog, orders, and users"
+              : "Sign in to continue your journey"}
+          </p>
+
+          {/* Admin Helper Banner */}
+          {loginMode === "admin" && (
+            <div className="lg-admin-banner">
+              <span className="lg-admin-badge">Admin Credentials</span>
+              <p className="lg-admin-info">
+                Email: <code>admin@gmail.com</code> &middot; Password: <code>admin111</code>
+              </p>
+              <button
+                type="button"
+                className="lg-admin-quick-btn"
+                onClick={() => handleDemoLogin("admin@gmail.com", "admin111")}
+                disabled={loading}
+              >
+                ⚡ 1-Click Sign In as Admin
+              </button>
+            </div>
+          )}
+
+          {/* Customer Quick Demo Access Bar */}
+          {loginMode === "customer" && (
+            <div className="lg-demo-box">
+              <span className="lg-demo-label">Quick Access Options</span>
+              <div className="lg-demo-buttons">
+                <button
+                  type="button"
+                  className="lg-demo-btn"
+                  onClick={() => handleDemoLogin("demo@vaami.com", "demo123")}
+                  disabled={loading}
+                >
+                  <span>👤 Demo Customer</span>
+                </button>
+                <button
+                  type="button"
+                  className="lg-demo-btn"
+                  onClick={() => handleSelectMode("admin")}
+                >
+                  <span>🛡️ Switch to Admin</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="lg-form">
 
@@ -185,6 +292,19 @@ function Login() {
                   </>
                 )}
               </span>
+            </button>
+
+            {/* Skip Login / Guest Access */}
+            <button
+              type="button"
+              className="lg-skip-btn"
+              onClick={handleSkipLogin}
+            >
+              <span>Explore Collection as Guest</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
             </button>
 
           </form>
@@ -548,6 +668,190 @@ const css = `
 
   @keyframes lgSpin2 {
     to { transform: rotate(360deg); }
+  }
+
+  /* ── MODE TABS ── */
+  .lg-mode-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 24px;
+    gap: 4px;
+  }
+
+  .lg-mode-tab {
+    flex: 1;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .lg-mode-tab:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .lg-mode-tab.active {
+    background: linear-gradient(135deg, #6d28d9, #9333ea);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(109, 40, 217, 0.4);
+  }
+
+  /* ── ADMIN BANNER ── */
+  .lg-admin-banner {
+    background: rgba(109, 40, 217, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lg-admin-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffd6ff;
+    background: rgba(109, 40, 217, 0.5);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .lg-admin-info {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+
+  .lg-admin-info code {
+    background: rgba(0, 0, 0, 0.35);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: #ffd6ff;
+    font-family: monospace;
+    font-size: 12px;
+  }
+
+  .lg-admin-quick-btn {
+    width: 100%;
+    padding: 11px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #1a0f00;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  }
+
+  .lg-admin-quick-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5);
+    filter: brightness(1.08);
+  }
+
+  /* ── DEMO ACCESS & SKIP ── */
+  .lg-demo-box {
+    margin-bottom: 24px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(168, 85, 247, 0.35);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .lg-demo-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 600;
+  }
+
+  .lg-demo-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .lg-demo-btn {
+    flex: 1;
+    padding: 9px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: #e2d9f3;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .lg-demo-btn:hover:not(:disabled) {
+    background: rgba(109, 40, 217, 0.28);
+    border-color: rgba(168, 85, 247, 0.6);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .lg-demo-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .lg-skip-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 13px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    color: #ffd6ff;
+    font-family: 'Jost', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .lg-skip-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 214, 255, 0.35);
+    color: #fff;
+    transform: translateY(-1px);
   }
 
   /* ── DIVIDER ── */

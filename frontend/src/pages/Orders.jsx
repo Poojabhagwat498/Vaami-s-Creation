@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getImageUrl } from "../config/api";
 
 const fonts = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap');
@@ -111,7 +112,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("https://vaami-s-creation.onrender.com/api/orders/my", {
+        const res = await fetch("/api/orders/my", {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -235,7 +236,7 @@ const Orders = () => {
                       {order.items?.map((item) => (
                         <div key={item._id} style={s.itemRow} className="item-row">
                           <img
-                            src={`https://vaami-s-creation.onrender.com${item.image}`}
+                            src={getImageUrl(item.image)}
                             alt={item.name}
                             style={s.itemImg}
                             className="item-img"

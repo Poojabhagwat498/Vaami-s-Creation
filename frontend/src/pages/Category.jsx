@@ -25,7 +25,7 @@ const Category = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://vaami-s-creation.onrender.com/api/products");
+        const res = await fetch("/api/products");
         const data = await res.json();
         const filtered = data.filter(
           (p) => p.category?.toLowerCase() === categoryName.toLowerCase()
